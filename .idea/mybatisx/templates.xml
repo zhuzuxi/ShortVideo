@@ -73,13 +73,13 @@
                 </TableUIInfo>
               </list>
             </option>
-            <option name="templatesName" value="mybatis-plus2" />
+            <option name="templatesName" value="mybatis-plus3" />
             <option name="useLombokPlugin" value="true" />
           </GenerateConfig>
         </option>
         <option name="moduleName" value="backend" />
         <option name="projectPath" value="$PROJECT_DIR$" />
-        <option name="templateName" value="mybatis-plus2" />
+        <option name="templateName" value="mybatis-plus3" />
       </TemplateContext>
     </option>
   </component>
