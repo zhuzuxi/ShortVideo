@@ -10,13 +10,14 @@
             <result property="password" column="password" jdbcType="VARCHAR"/>
             <result property="sex" column="sex" jdbcType="VARCHAR"/>
             <result property="age" column="age" jdbcType="INTEGER"/>
+            <result property="type" column="type" jdbcType="VARCHAR"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
             <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,username,password,
-        sex,age,create_time,
-        update_time
+        sex,age,type,
+        create_time,update_time
     </sql>
 </mapper>

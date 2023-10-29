@@ -9,11 +9,15 @@
             <result property="userid" column="userid" jdbcType="INTEGER"/>
             <result property="title" column="title" jdbcType="VARCHAR"/>
             <result property="desc" column="desc" jdbcType="VARCHAR"/>
+            <result property="type" column="type" jdbcType="VARCHAR"/>
             <result property="address" column="address" jdbcType="VARCHAR"/>
+            <result property="uploadDatetime" column="upload_datetime" jdbcType="TIMESTAMP"/>
+            <result property="uploadLocation" column="upload_location" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,userid,title,
-        desc,address
+        desc,type,address,
+        upload_datetime,upload_location
     </sql>
 </mapper>
