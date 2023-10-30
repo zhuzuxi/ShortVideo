@@ -1,7 +1,11 @@
 package com.backend.service;
 
+import com.backend.dto.UserDto;
+import com.backend.entity.Result;
 import com.backend.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
 * @author oo
@@ -10,4 +14,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface UserService extends IService<User> {
 
+    public Result<List<User>> getAllUsers();
+
+    public Result<UserDto> getUserById(Integer id);
 }

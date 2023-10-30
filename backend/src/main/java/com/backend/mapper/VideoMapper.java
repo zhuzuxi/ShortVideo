@@ -2,6 +2,7 @@ package com.backend.mapper;
 
 import com.backend.entity.Video;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
 * @author oo
@@ -9,7 +10,9 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @createDate 2023-10-29 11:53:24
 * @Entity com.backend.entity.Video
 */
+@Mapper
 public interface VideoMapper extends BaseMapper<Video> {
+
 
 }
 
