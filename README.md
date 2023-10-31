@@ -24,6 +24,8 @@
   * [ ] 但是 input 那些上面的 icon 不知道为什么还是有bug一样不展示
 
 ![首页](image.png)
+![上传页面](image-1.png)
+![登录页面](image-2.png)
 
 ---
 > 下一步计划
