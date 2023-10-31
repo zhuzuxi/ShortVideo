@@ -15,7 +15,7 @@
       <div class="upload" @click="toUpload">+</div>
       <!-- 登录或者个人中心 可以放个组件 -->
       <!-- <div class="person gh_button">登录</div> -->
-      <a-button class="person">登录</a-button>
+      <a-button class="person" @click="toPerson">登录</a-button>
     </div>
   </div>
 </template>
@@ -27,6 +27,9 @@ const value = ref('')
 
 const toUpload = () => {
   router.push('/upload')
+}
+const toPerson = () => {
+  router.push('/person')
 }
 
 const onSearch = (searchValue) => {

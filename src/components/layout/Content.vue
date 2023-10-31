@@ -24,11 +24,16 @@
     background-color: #eee;
   }
   .right {
-    flex: 9;
+    flex: 8;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 0.4vh 0.8vw;
+    margin-left: 1vw;
+    box-sizing: border-box;
+    border-radius: 1vw;
+    box-shadow: 0 0 0.8vw #969292;
+    background-color: #eee;
   }
 }
 </style>

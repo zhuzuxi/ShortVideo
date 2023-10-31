@@ -20,24 +20,10 @@
 import Content from '@/components/layout/Content.vue'
 </script>
 <style scoped lang="less">
-.left > .gh_button {
-  min-width: 6vw;
-  margin-bottom: 1.5vw;
-}
-.gh_button {
-  border-radius: 0.4vw;
-}
-
 .right > .video_box {
   width: 100%;
   height: 100%;
-  border-radius: 1vw;
-  padding: 0.5vw;
-  box-sizing: border-box;
   position: relative;
-  // backdrop-filter: blur(6px);
-  background-color: #eee;
-  box-shadow: 0 0 0.8vw #969292;
 
   .video {
     width: 100%;

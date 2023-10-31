@@ -1,6 +1,10 @@
 /* 这里放一些个人的全局 css ，统一常用小组件，例如按钮等 */
 
 /* 椭圆按钮 */
-
+.gh_button {
+  min-width: 6vw;
+  margin-bottom: 1.5vw;
+  border-radius: 0.4vw;
+}
 
 
