@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 /**
 * @author oo
 * @description 针对表【like】的数据库操作Service实现
-* @createDate 2023-10-29 11:53:14
+* @createDate 2023-10-31 11:09:46
 */
 @Service
 public class LikeServiceImpl extends ServiceImpl<LikeMapper, Like>

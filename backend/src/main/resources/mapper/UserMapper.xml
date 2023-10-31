@@ -5,19 +5,20 @@
 <mapper namespace="com.backend.mapper.UserMapper">
 
     <resultMap id="BaseResultMap" type="com.backend.entity.User">
-            <id property="id" column="id" jdbcType="INTEGER"/>
-            <result property="username" column="username" jdbcType="VARCHAR"/>
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
             <result property="password" column="password" jdbcType="VARCHAR"/>
-            <result property="sex" column="sex" jdbcType="VARCHAR"/>
-            <result property="age" column="age" jdbcType="INTEGER"/>
-            <result property="type" column="type" jdbcType="VARCHAR"/>
+            <result property="phone" column="phone" jdbcType="VARCHAR"/>
+            <result property="img" column="img" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="INTEGER"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
-            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="fansCnt" column="fans_cnt" jdbcType="BIGINT"/>
+            <result property="follows" column="follows" jdbcType="BIGINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,username,password,
-        sex,age,type,
-        create_time,update_time
+        id,name,password,
+        phone,img,status,
+        create_time,fans_cnt,follows
     </sql>
 </mapper>

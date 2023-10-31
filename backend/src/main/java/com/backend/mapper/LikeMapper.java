@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 /**
 * @author oo
 * @description 针对表【like】的数据库操作Mapper
-* @createDate 2023-10-29 11:53:14
+* @createDate 2023-10-31 11:09:46
 * @Entity com.backend.entity.Like
 */
 @Mapper

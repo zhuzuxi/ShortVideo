@@ -11,44 +11,69 @@ import lombok.Data;
 @Data
 public class Video implements Serializable {
     /**
-     * 视频id
-     */
-    private Integer id;
-
-    /**
      * 
      */
-    private Integer userid;
+    private Long id;
 
     /**
-     * 视频标题
+     * 视频url
      */
-    private String title;
+    private String videoUrl;
 
     /**
      * 视频描述
      */
-    private String desc;
+    private String description;
 
     /**
-     * 类型 暂时一个视频只有一个类型
+     * 视频封面图片url
      */
-    private String type;
+    private String cover;
 
     /**
-     * 视频资源地址
+     * 点赞次数
      */
-    private String address;
+    private Long like;
 
     /**
-     * 上传时间
+     * 分享次数
      */
-    private Date uploadDatetime;
+    private Long share;
 
     /**
-     * 上传位置 省市
+     * 收藏次数
      */
-    private String uploadLocation;
+    private Long collection;
+
+    /**
+     * 视频标签
+     */
+    private String flag;
+
+    /**
+     * 视频分类
+     */
+    private Integer categoryId;
+
+    /**
+     * 视频状态 0 待审核 1 已发布
+     */
+    private Integer status;
+
+    /**
+     * 视频权限0 仅自己 1 仅朋友 2 仅粉丝 3 所有人
+     */
+    private Integer permission;
+
+    /**
+     * 发布时间
+     */
+    private Date publishTime;
+
+    /**
+     * 作者id
+     */
+    private Long authorId;
 
     private static final long serialVersionUID = 1L;
 }

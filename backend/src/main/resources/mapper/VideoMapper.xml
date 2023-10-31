@@ -5,19 +5,26 @@
 <mapper namespace="com.backend.mapper.VideoMapper">
 
     <resultMap id="BaseResultMap" type="com.backend.entity.Video">
-            <id property="id" column="id" jdbcType="INTEGER"/>
-            <result property="userid" column="userid" jdbcType="INTEGER"/>
-            <result property="title" column="title" jdbcType="VARCHAR"/>
-            <result property="desc" column="desc" jdbcType="VARCHAR"/>
-            <result property="type" column="type" jdbcType="VARCHAR"/>
-            <result property="address" column="address" jdbcType="VARCHAR"/>
-            <result property="uploadDatetime" column="upload_datetime" jdbcType="TIMESTAMP"/>
-            <result property="uploadLocation" column="upload_location" jdbcType="VARCHAR"/>
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="videoUrl" column="video_url" jdbcType="VARCHAR"/>
+            <result property="description" column="description" jdbcType="VARCHAR"/>
+            <result property="cover" column="cover" jdbcType="VARCHAR"/>
+            <result property="like" column="like" jdbcType="BIGINT"/>
+            <result property="share" column="share" jdbcType="BIGINT"/>
+            <result property="collection" column="collection" jdbcType="BIGINT"/>
+            <result property="flag" column="flag" jdbcType="VARCHAR"/>
+            <result property="categoryId" column="category_id" jdbcType="INTEGER"/>
+            <result property="status" column="status" jdbcType="INTEGER"/>
+            <result property="permission" column="permission" jdbcType="INTEGER"/>
+            <result property="publishTime" column="publish_time" jdbcType="TIMESTAMP"/>
+            <result property="authorId" column="author_id" jdbcType="BIGINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,userid,title,
-        desc,type,address,
-        upload_datetime,upload_location
+        id,video_url,description,
+        cover,like,share,
+        collection,flag,category_id,
+        status,permission,publish_time,
+        author_id
     </sql>
 </mapper>

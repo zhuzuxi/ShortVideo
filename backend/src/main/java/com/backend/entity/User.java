@@ -11,44 +11,49 @@ import lombok.Data;
 @Data
 public class User implements Serializable {
     /**
-     * 抖音号
-     */
-    private Integer id;
-
-    /**
      * 
      */
-    private String username;
+    private Long id;
 
     /**
-     * 
+     * 用户名
+     */
+    private String name;
+
+    /**
+     * 密码
      */
     private String password;
 
     /**
      * 
      */
-    private String sex;
+    private String phone;
 
     /**
-     * 
+     * 头像url
      */
-    private Integer age;
+    private String img;
 
     /**
-     * 用户喜欢的类型或者发布视频的类型 用','分隔
+     * 帐号状态 0禁用 1正常
      */
-    private String type;
+    private Integer status;
 
     /**
-     * 
+     * 创建时间
      */
     private Date createTime;
 
     /**
-     * 
+     * 粉丝数
      */
-    private Date updateTime;
+    private Long fansCnt;
+
+    /**
+     * 关注数
+     */
+    private Long follows;
 
     private static final long serialVersionUID = 1L;
 }
