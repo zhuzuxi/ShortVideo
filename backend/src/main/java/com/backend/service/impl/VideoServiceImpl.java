@@ -1,6 +1,8 @@
 package com.backend.service.impl;
 
+import com.backend.common.Constant;
 import com.backend.service.VideoCategoryService;
+import com.backend.util.fileUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.backend.entity.Video;
 import com.backend.service.VideoService;
@@ -18,6 +20,7 @@ import javax.annotation.Resource;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.List;
 
 /**
 * @author oo
@@ -50,9 +53,12 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
         String upToken = auth.uploadToken(bucket);
 //如果是Windows情况下，格式是 D:\\qiniu\\test.png
         File file=new File(localFilePath);
-        for (File listFile : file.listFiles()) {
+
+        List<String> AllAbsolutePath = fileUtils.getAllFileAbsolutePathFromDirectory(localFilePath, Constant.VIDEO_TYPE);
+
+        for (String path : AllAbsolutePath) {
             try {
-                Response response = uploadManager.put(listFile.getAbsolutePath(), key, upToken);
+                Response response = uploadManager.put(path, key, upToken);
                 //解析上传成功的结果
                 DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
                 Video video = new Video();
@@ -69,7 +75,8 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
                         System.err.println(body);
                     } catch (Exception ignored) {
                     }
-                }
+        }
+
             }
         }
 
