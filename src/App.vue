@@ -13,7 +13,7 @@ import Header from '@/components/layout/Header.vue'
 <style scoped lang="less">
 #app {
   padding: 1vw;
-  height: 98vh;
+  height: 97vh;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;

@@ -12,7 +12,9 @@
       />
     </div>
     <div class="right">
-      <div class="upload" @click="toUpload">+</div>
+      <div class="upload" @click="toUpload">
+        <PlusCircleOutlined />
+      </div>
       <!-- 登录或者个人中心 可以放个组件 -->
       <!-- <div class="person gh_button">登录</div> -->
       <a-button class="person" @click="toPerson">登录</a-button>
@@ -22,6 +24,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { PlusCircleOutlined } from '@ant-design/icons-vue'
 const router = useRouter()
 const value = ref('')
 
@@ -73,16 +76,22 @@ const onSearch = (searchValue) => {
     .upload {
       margin-right: 1.2vw;
       border-radius: 50%;
-      width: 2vw;
-      height: 2vw;
       text-align: center;
       line-height: 1.7vw;
       font-size: 2vw;
       background-color: gold;
+      color: #222;
+      position: relative;
+      // 设置字体颜色变化动画
+      transition-property: all;
+      transition-duration: 0.2s;
     }
     .upload:hover {
       cursor: pointer;
+      color: #4096ff;
+      box-shadow: 0 0 0.8vw #ccc;
     }
+
     .person {
       padding: 0 1.2vw;
       background-color: gold;
