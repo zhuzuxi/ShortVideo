@@ -2,8 +2,11 @@ package com.backend;
 
 import com.backend.dto.UserDto;
 import com.backend.entity.User;
+import com.backend.entity.Video;
 import com.backend.mapper.UserMapper;
+import com.backend.mapper.VideoMapper;
 import com.backend.service.UserService;
+import com.backend.service.VideoService;
 import com.google.gson.Gson;
 import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
@@ -18,6 +21,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
+import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 @SpringBootTest
 class BackendApplicationTests {
@@ -29,8 +35,8 @@ class BackendApplicationTests {
 //        System.out.println(userMapper.getAllUsers());
     }
 
-    @Resource
-    private ModelMapper modelMapper;
+//    @Resource
+//    private ModelMapper modelMapper;
 
     @Test
     void modelMapper(){
@@ -113,5 +119,84 @@ class BackendApplicationTests {
 //        System.out.println(urlString);
 //
 //    }
+
+    @Test
+    void testFile(){
+        File file=new File("D:\\test_qiniu\\animal_mysql");
+        for (File listFile : file.listFiles()) {
+            System.out.println(listFile.getAbsolutePath());
+        }
+    }
+
+    @Resource
+    private VideoMapper videoMapper;
+
+
+    @Resource
+    private Auth auth;
+
+    @Resource
+    private UploadManager uploadManager;
+    @Test
+    public void uploadVideo() throws UnsupportedEncodingException {
+        String bucket="xzqmsgh";
+        String key=null;
+        String upToken = auth.uploadToken(bucket);
+//如果是Windows情况下，格式是 D:\\qiniu\\test.png
+        String localFilePath = "D:\\qiniuyun_data\\videos";
+        File file=new File(localFilePath);
+        for (File listFile : file.listFiles()) {
+            try {
+                Response response = uploadManager.put(listFile.getAbsolutePath(), key, upToken);
+                //解析上传成功的结果
+                DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
+                Video video = new Video();
+                video.setVideoUrl(putRet.key);
+                videoMapper.insert(video);
+
+            } catch (QiniuException ex) {
+                ex.printStackTrace();
+                if (ex.response != null) {
+                    System.err.println(ex.response);
+
+                    try {
+                        String body = ex.response.toString();
+                        System.err.println(body);
+                    } catch (Exception ignored) {
+                    }
+                }
+            }
+        }
+
+    }
+
+    @Test
+    void getUrl(String key) throws UnsupportedEncodingException {
+        String fileName = "FpLhreYOpPbFyL_j1Pk0H8ZMT4Mq";//上传视频之后会返回文件名（key）
+        String domainOfBucket = "http://s3c51zvtx.hn-bkt.clouddn.com"; //测试外链
+        String encodedFileName = URLEncoder.encode(fileName, "utf-8").replace("+", "%20");
+        String publicUrl = String.format("%s/%s", domainOfBucket, encodedFileName);
+        String accessKey = "w3VdBuR5aZoHP-v3NIjNJiOh0DwEq5Fh9EtQj1rM";//对象空间ak
+        String secretKey = "Aog2_0SGoZ0IXNltTpn9pPcxsl0R7oPkNW_AMQGO";//对象空间sk
+        Auth auth = Auth.create(accessKey, secretKey);
+        long expireInSeconds = 3600;//1小时，可以自定义链接过期时间
+        String finalUrl = auth.privateDownloadUrl(publicUrl, expireInSeconds);
+        System.out.println(finalUrl);
+    }
+
+    @Resource
+    private VideoService videoService;
+    @Test
+    void testupload(){
+        String localFilePath = "D:\\qiniuyun_data\\videos";
+        videoService.uploadVideo(localFilePath);
+    }
+
+
+    @Test
+    void testAuth(){
+        System.out.println(auth);
+    }
+
 
 }

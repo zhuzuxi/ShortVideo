@@ -9,5 +9,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2023-10-31 11:10:08
 */
 public interface VideoService extends IService<Video> {
+    public void uploadVideo(String localFilePath);
+
+    public String getUrl(String key);
 
 }

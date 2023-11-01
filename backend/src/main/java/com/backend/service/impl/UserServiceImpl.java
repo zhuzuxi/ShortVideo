@@ -4,7 +4,11 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.backend.entity.User;
 import com.backend.service.UserService;
 import com.backend.mapper.UserMapper;
+import com.qiniu.util.Auth;
 import org.springframework.stereotype.Service;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 /**
 * @author oo
