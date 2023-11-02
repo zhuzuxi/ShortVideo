@@ -2,13 +2,18 @@ package com.backend.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 
  * @TableName user
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class User implements Serializable {
     /**
      * 
@@ -18,7 +23,7 @@ public class User implements Serializable {
     /**
      * 用户名
      */
-    private String name;
+    private String username;
 
     /**
      * 密码

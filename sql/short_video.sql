@@ -21,7 +21,7 @@ SET FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` bigint NOT NULL,
-  `name` varchar(32) DEFAULT NULL COMMENT '用户名',
+  `username` varchar(32) DEFAULT NULL COMMENT '用户名',
   `password` varchar(64) DEFAULT NULL COMMENT '密码',
   `phone` varchar(11) DEFAULT NULL,
   `img` varchar(255) DEFAULT NULL COMMENT '头像url',

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form class="form" action="/login" method="post">
+    <!-- 在表单中添加令牌隐藏域 -->
+    <input type="hidden" th:value="${_csrf.token}" name="_csrf" th:if="${_csrf}"/>
+    <input type="text" placeholder="用户名" name="username">
+    <input type="password" placeholder="密码" name="password">
+    <button type="submit">登录</button>
+</form>
+</body>
+</html>
