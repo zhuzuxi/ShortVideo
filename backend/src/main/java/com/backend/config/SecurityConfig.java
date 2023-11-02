@@ -33,7 +33,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginProcessingUrl("/user/login")//登录访问路径
                 .defaultSuccessUrl("/test/index").permitAll()//登陆成功之后，跳转路径
                 .and().authorizeRequests()
-                .antMatchers("/","/test/hello","/user/login").permitAll()//设置哪些路径可以直接访问，不需要认证
+//                TODO video模块需要测试展示全部放行 后期记得配置好
+                .antMatchers("/video/**","/test/hello","/user/login").permitAll()//设置哪些路径可以直接访问，不需要认证
                 //当前登录用户，只有具有admins权限才可以访问
                 .antMatchers("/test/index").hasAuthority("admins")
                 .anyRequest().authenticated()
