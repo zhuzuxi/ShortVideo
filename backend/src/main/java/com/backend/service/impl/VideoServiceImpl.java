@@ -1,8 +1,13 @@
 package com.backend.service.impl;
 
 import com.backend.common.Constant;
-import com.backend.service.VideoCategoryService;
+import com.backend.dto.VideoUserDto;
+import com.backend.entity.Result;
+import com.backend.entity.User;
+import com.backend.mapper.UserMapper;
 import com.backend.util.fileUtils;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.backend.entity.Video;
 import com.backend.service.VideoService;
@@ -20,7 +25,10 @@ import javax.annotation.Resource;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
 * @author oo
@@ -42,6 +50,14 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
 
     @Resource
     private VideoMapper videoMapper;
+
+//    @Resource
+//    private Jedis jedis;
+
+    @Resource
+    private UserMapper userMapper;
+
+
 
     String localFilePath = "D:\\qiniuyun_data\\videos";
 
@@ -95,6 +111,52 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
         long expireInSeconds = 3600;//1小时，可以自定义链接过期时间
         String finalUrl = auth.privateDownloadUrl(publicUrl, expireInSeconds);
         return finalUrl;
+    }
+
+    /**
+     * 需要考虑 300条视频刷完之后 该如何refresh 和 解决重复刷到的问题
+     *
+     * @param pagenum
+     * @return
+     */
+    @Override
+    public Result<List<VideoUserDto>> recommendVideos(Integer pagenum) {
+
+        /**
+         * 简易的推荐
+         */
+        QueryWrapper<Video> videoQueryWrapper = new QueryWrapper<>();
+        videoQueryWrapper.orderByDesc("shares","'collection'","likes");
+        Page<Video> page=new Page<>(pagenum,30);
+        Page<Video> videoPage = videoMapper.selectPage(page, videoQueryWrapper);
+        if (Objects.isNull(videoPage.getRecords())){
+            return Result.ERR(500,"网络异常请稍后再试",null);
+        }
+        List<Video> videoList = videoPage.getRecords();
+
+        /**
+         * 获得作者对象列表
+         */
+        List<Long> authorIdList=new ArrayList<>();
+        for (Video record : videoList) {
+            authorIdList.add(record.getAuthorId());
+        }
+        QueryWrapper<User> userQueryWrapper=new QueryWrapper<>();
+        userQueryWrapper.in("id",authorIdList);
+        List<User> userList = userMapper.selectList(userQueryWrapper);
+
+
+        /**
+         * 拼接成 VideoUserDto
+         */
+        List<VideoUserDto> videoUserDtoList = new ArrayList<>();
+        for (int i=0;i<userList.size();i++){
+            videoUserDtoList.add(new VideoUserDto(videoList.get(i),userList.get(i)));
+        }
+
+
+        Collections.shuffle(videoUserDtoList);
+        return Result.SUCCEED(String.format("获取第%d页成功",pagenum),videoUserDtoList);
     }
 }
 
