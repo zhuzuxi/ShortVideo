@@ -4,6 +4,9 @@ import com.backend.entity.Video;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 /**
 * @author oo
@@ -11,8 +14,11 @@ import org.apache.ibatis.annotations.Mapper;
 * @createDate 2023-10-31 11:10:08
 * @Entity com.backend.entity.Video
 */
-@Mapper
+//@Mapper
 public interface VideoMapper extends BaseMapper<Video> {
+
+    @Select("select * from video")
+    public List<Video> selectAllVideo();
 
 
 }

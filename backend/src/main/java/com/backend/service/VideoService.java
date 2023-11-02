@@ -1,7 +1,11 @@
 package com.backend.service;
 
+import com.backend.dto.VideoUserDto;
+import com.backend.entity.Result;
 import com.backend.entity.Video;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
 * @author oo
@@ -13,4 +17,5 @@ public interface VideoService extends IService<Video> {
 
     public String getUrl(String key);
 
+    Result<List<VideoUserDto>> recommendVideos(Integer pagenum);
 }

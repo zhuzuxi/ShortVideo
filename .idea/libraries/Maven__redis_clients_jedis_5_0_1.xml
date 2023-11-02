@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: redis.clients:jedis:5.0.1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../JetBrains/apache-maven-3.9.1/conf/ropository/redis/clients/jedis/5.0.1/jedis-5.0.1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/../../JetBrains/apache-maven-3.9.1/conf/ropository/redis/clients/jedis/5.0.1/jedis-5.0.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../JetBrains/apache-maven-3.9.1/conf/ropository/redis/clients/jedis/5.0.1/jedis-5.0.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

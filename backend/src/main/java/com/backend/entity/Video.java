@@ -33,12 +33,12 @@ public class Video implements Serializable {
     /**
      * 点赞次数
      */
-    private Long like;
+    private Long likes;
 
     /**
      * 分享次数
      */
-    private Long share;
+    private Long shares;
 
     /**
      * 收藏次数
@@ -58,7 +58,7 @@ public class Video implements Serializable {
     /**
      * 视频状态 0 待审核 1 已发布
      */
-    private Integer status;
+    private Integer video_status;
 
     /**
      * 视频权限0 仅自己 1 仅朋友 2 仅粉丝 3 所有人
