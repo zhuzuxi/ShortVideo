@@ -23,4 +23,13 @@ public class Result<T> {
         return new Result(200,message,data);
     }
 
+    public static <T> Result<T> SUCCEED(T object) {
+        Result<T> result = new Result<T>();
+        result.data = object;
+        result.code = 1;
+        return result;
+    }
+
+    public Result() {
+    }
 }

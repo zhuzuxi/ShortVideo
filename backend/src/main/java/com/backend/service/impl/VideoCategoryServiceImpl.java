@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.backend.entity.VideoCategory;
 import com.backend.service.VideoCategoryService;
 import com.backend.mapper.VideoCategoryMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
 * @author oo
@@ -15,6 +18,13 @@ import org.springframework.stereotype.Service;
 public class VideoCategoryServiceImpl extends ServiceImpl<VideoCategoryMapper, VideoCategory>
     implements VideoCategoryService{
 
+    @Autowired
+    private VideoCategoryMapper videoCategoryMapper;
+    @Override
+    public List<VideoCategory> getAll() {
+
+        return videoCategoryMapper.selectList(null);
+    }
 }
 
 

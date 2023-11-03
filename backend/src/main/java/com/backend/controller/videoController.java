@@ -6,10 +6,7 @@ import com.backend.entity.Video;
 import com.backend.mapper.VideoMapper;
 import com.backend.service.VideoService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -37,6 +34,12 @@ public class videoController {
     @GetMapping("/recommend")
     public Result<List<VideoUserDto>> recommendVideos(@RequestParam(defaultValue = "1") Integer pagenum){
         return videoService.recommendVideos(pagenum);
+    }
+
+    //新增视频
+    @PostMapping
+    public Result addVideo(){
+        return null;
     }
 
 }

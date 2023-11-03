@@ -14,6 +14,9 @@ public class VideoCategory implements Serializable {
      */
     private Integer id;
 
+    //类型
+    private String type;
+
     /**
      * 分类名
      */
