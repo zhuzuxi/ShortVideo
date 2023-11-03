@@ -37,7 +37,7 @@ public class VideoServiceTest {
     private VideoService videoService;
     @Test
     void testupload(){
-        String localFilePath = "D:\\qiniuyun_data\\videos";
+        String localFilePath = "D:\\qiniuyun_data\\videos";//这里输入
         videoService.uploadVideo(localFilePath);
     }
 
