@@ -15,43 +15,61 @@
             <div class="detail">
               <div class="username">用户名</div>
               <div class="btn_list">
-                <a-button type="default" class="btn">关注</a-button>
-                <a-button type="default" class="btn">粉丝</a-button>
+                <a-button type="default" class="btn" @click="follow">关注</a-button>
+                <a-button type="default" class="btn" @click="fans">粉丝</a-button>
                 <a-button type="dashed" class="btn good">获赞：{{ good }}</a-button>
               </div>
             </div>
           </div>
           <div class="video_box">
-            <!-- 之后渲染的时候可能需要算法转化一下，就算不够三个视频也可以占位符 -->
-            <div class="video_list">
-              <div class="item">11</div>
-              <div class="item">11</div>
-              <div class="item">11</div>
-            </div>
-            <div class="video_list">
-              <div class="item">11</div>
-              <div class="item">11</div>
-              <div class="item">11</div>
-            </div>
-            <div class="video_list">
-              <div class="item">11</div>
-              <div class="item">11</div>
-              <div class="item"></div>
+            <div class="inser_box">
+              <!-- 之后渲染的时候可能需要算法转化一下，就算不够三个视频也可以占位符 -->
+              <div class="video_list">
+                <div class="item">11</div>
+                <div class="item">11</div>
+                <div class="item">11</div>
+              </div>
+              <div class="video_list">
+                <div class="item">11</div>
+                <div class="item">11</div>
+                <div class="item">11</div>
+              </div>
+              <div class="video_list">
+                <div class="item">11</div>
+                <div class="item">11</div>
+                <div class="item"></div>
+              </div>
             </div>
           </div>
         </div>
       </template>
     </Content>
+    <gh-dialog class="dialog" v-if="store.dialogFlag"></gh-dialog>
   </div>
 </template>
 <script setup>
 import Content from '@/components/layout/Content.vue'
+import GhDialog from '../components/GhDialog.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useBusinessStore } from '@/stores/business.js'
 
 const router = useRouter()
+const store = useBusinessStore()
 
 const good = ref('88')
+const follow = () => {
+  // 打开面板，并且进入到 关注 页面
+  store.changeDialog(true)
+  store.changePannal(0)
+  console.log('关注')
+}
+const fans = () => {
+  // 打开面板，并且进入到 粉丝 页面
+  store.changeDialog(true)
+  store.changePannal(1)
+  console.log('粉丝')
+}
 
 const back = () => {
   router.back()
@@ -107,12 +125,16 @@ const back = () => {
     }
     .video_box {
       flex: 3;
-      height: 100%;
-      padding: 2vh 1vw;
-
+      padding: 2vh 0.8vw;
       border-radius: 0.5vw;
-      overflow-y: scroll;
       background-color: #e4c30497;
+
+      .inser_box {
+        height: 60vh;
+        overflow-y: scroll;
+        border-radius: 0.5vw;
+        box-sizing: border-box;
+      }
 
       .video_list {
         display: flex;
@@ -138,5 +160,15 @@ const back = () => {
       }
     }
   }
+}
+
+.dialog {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  background-color: #ccccccb4;
 }
 </style>

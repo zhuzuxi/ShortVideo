@@ -4,10 +4,11 @@
     <video
       class="video"
       ref="video"
-      @click="play"
+      @click.stop="play"
       @loadedmetadata="videoLoaded"
       @timeupdate="getCurrentTime"
       loop
+      disablePictureInPicture
     >
       <source src="@/assets/1.mp4" />
     </video>

@@ -45,9 +45,21 @@
             <div class="simple_imput">
               <a-input placeholder="请设置标签，格式如：#标签" />
             </div>
+
             <div class="address">
               <div class="control">
                 <span>是否显示ip：</span><a-switch v-model:checked="checked" />
+              </div>
+              <div class="select">
+                <a-select
+                  v-model:selected="selected"
+                  @change="handleChange"
+                  placeholder="请选择视频分区"
+                >
+                  <a-select-option v-for="item in videoArea" :value="item">{{
+                    item
+                  }}</a-select-option>
+                </a-select>
               </div>
             </div>
 
@@ -67,7 +79,12 @@ import { useRouter } from 'vue-router'
 
 const checked = ref(false)
 const router = useRouter()
+const selected = ref('')
+const videoArea = ref(['旅游', '体育', '生活', '娱乐'])
 
+const handleChange = (value) => {
+  selected.value = value // 这样才能修改成功
+}
 const back = () => {
   router.back()
 }
@@ -121,6 +138,9 @@ const back = () => {
     .simple_imput {
     }
     .address {
+      display: flex;
+      align-items: center;
+      // justify-content: space-between;
       background-color: #eee;
 
       .control {
@@ -130,6 +150,13 @@ const back = () => {
         padding: 0.4vw 0.35vw;
         border-radius: 0.5vw;
         font-weight: 600;
+        margin-right: 6vw;
+        background-color: orange;
+      }
+      .select {
+        padding: 0.4vw 0.35vw;
+        border-radius: 0.5vw;
+        text-align: center;
         background-color: orange;
       }
     }
