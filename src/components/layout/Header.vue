@@ -4,7 +4,7 @@
     <!-- <div class="logo">
       <img src="@/assets/logo.jpg" alt="" />
     </div> -->
-    <div class="search">
+    <div class="search" v-if="route.fullPath === '/'">
       <a-input
         v-model:value="value"
         class="input_search"
@@ -23,10 +23,12 @@
 </template>
 <script setup>
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { PlusCircleOutlined } from '@ant-design/icons-vue'
 const router = useRouter()
+const route = useRoute()
 const value = ref('')
+console.log()
 
 const toUpload = () => {
   router.push('/upload')
