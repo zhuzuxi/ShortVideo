@@ -9,8 +9,11 @@
       @timeupdate="getCurrentTime"
       loop
     >
-      <source src="@/assets/2.mp4" />
+      <source src="@/assets/1.mp4" />
     </video>
+    <!-- <link rel="preload" as="video" href="https://cdn.com/small-file.mp4" /> -->
+
+    <gh-video-controls class="right_mutual"></gh-video-controls>
 
     <!-- 控件  -->
     <div class="controls">
@@ -25,14 +28,14 @@
       <!-- 暂停、播放、音量选择、快进、快退 -->
       <div class="other">
         <div class="basic">
-          <FastBackwardOutlined class="item" />
+          <FastBackwardOutlined class="item" @click="forward(false)" />
           <template v-if="doing">
             <PauseCircleOutlined class="item" @click="play" />
           </template>
           <template v-else>
             <PlayCircleOutlined class="item" @click="play" />
           </template>
-          <FastForwardOutlined class="item" />
+          <FastForwardOutlined class="item" @click="forward(true)" />
         </div>
         <div class="volume">
           <div class="time_data item">
@@ -40,11 +43,20 @@
             <span>-</span>
             <span>{{ formatTime(duration) }}</span>
           </div>
+          <!-- 倍速 -->
+          <span>倍速:</span>
+          <a-select class="speed" v-model:value="selected" @change="speedChange" :showArrow="false">
+            <a-select-option v-for="item in options" :value="item.value">{{
+              item.label
+            }}</a-select-option>
+          </a-select>
 
           <!-- 如果音量为0就换成透明的图标 -->
-          <SoundOutlined v-if="!volume" class="item" />
-          <SoundFilled v-else class="item" />
+          <SoundOutlined v-if="!volume" class="item" @click="mute" />
+          <SoundFilled v-else class="item" @click="mute" />
           <a-slider class="vol_line" id="test" v-model:value="volume" @change="changeVolume" />
+          <!-- 全屏 -->
+          <FullscreenOutlined class="item fullscn" @click="fullScn" />
         </div>
       </div>
     </div>
@@ -61,13 +73,16 @@ import {
   FastForwardOutlined,
   FastBackwardOutlined,
   CaretRightOutlined,
+  FullscreenOutlined,
   SoundOutlined,
   SoundFilled
 } from '@ant-design/icons-vue'
+
 import { formatTime } from '@/tools/formatTime.js'
 import { ref, onMounted } from 'vue'
 // 播放、暂停、进度条、音量变化等 逻辑处理都在controls 中
 import { controls } from '@/hooks/controls.js'
+import GhVideoControls from './GhVideoControls.vue'
 
 const video = ref('')
 const {
@@ -75,11 +90,17 @@ const {
   volume,
   duration,
   currentTime,
+  selected,
+  options,
   play,
   changeVolume,
+  mute,
   videoLoaded,
   changeTime,
-  getCurrentTime
+  forward,
+  getCurrentTime,
+  fullScn,
+  speedChange
 } = controls(video)
 // console.log(controls(video))
 </script>
@@ -122,6 +143,10 @@ const {
       .item {
         margin-right: 0.5vw;
       }
+      .item:hover {
+        color: #1677ff;
+        box-shadow: 0 0 0 0.8 #ccc;
+      }
 
       .basic {
         width: 100%;
@@ -137,17 +162,40 @@ const {
         align-items: center;
         justify-content: end;
 
+        .speed {
+          width: 4vw;
+          text-align: center;
+          margin: 0 1vw 0 0.5vw;
+        }
+
+        .vol_line {
+          flex: 0.7;
+        }
+
         .time_data {
           > span {
-            margin-right: 0.2vw;
+            margin-right: 0.3vw;
           }
+        }
+        .time_data:hover {
+          color: #000; //这个时间不需要变化
         }
 
         .vol_line {
           width: 10vw;
         }
+        // 全屏
+        .fullscn {
+          margin-left: 0.5vw;
+        }
       }
     }
+  }
+  .right_mutual {
+    position: absolute;
+    right: 2vw;
+    bottom: 8vh;
+    z-index: 1;
   }
   .show_pause {
     position: absolute;
