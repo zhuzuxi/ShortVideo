@@ -1,10 +1,17 @@
 package com.backend.service.impl;
 
+import com.backend.mapper.VideoMapper;
+import com.backend.service.VideoService;
+import com.backend.vo.VideoVO;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.backend.entity.Likes;
 import com.backend.service.LikeService;
 import com.backend.mapper.LikesMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.sql.Wrapper;
+import java.util.List;
 
 /**
 * @author oo
@@ -15,6 +22,22 @@ import org.springframework.stereotype.Service;
 public class LikeServiceImpl extends ServiceImpl<LikesMapper, Likes>
     implements LikeService{
 
+    @Autowired
+    private LikesMapper likesMapper;
+
+    @Autowired
+    private VideoService videoService;
+
+    /**
+     * 获取用户点赞过的视频
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<VideoVO> getLikeVideosByUserId(Long userId) {
+        List<Long> videoIds = likesMapper.getLikeVideoIdsByUserId(userId);
+        return videoService.getVideoVOByIds(videoIds);
+    }
 }
 
 

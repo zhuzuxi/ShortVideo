@@ -4,6 +4,7 @@ import com.backend.dto.VideoUserDto;
 import com.backend.entity.Result;
 import com.backend.entity.Video;
 import com.backend.vo.MyWorksVO;
+import com.backend.vo.VideoVO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -26,4 +27,11 @@ public interface VideoService extends IService<Video> {
      * @return
      */
     List<MyWorksVO> getMyWorksByUserId(Long user_id);
+
+    /**
+     * 根据多个视频id获取视频列表
+     * @param ids
+     * @return
+     */
+    List<VideoVO> getVideoVOByIds(List<Long> ids);
 }

@@ -3,11 +3,14 @@ package com.backend.controller;
 import com.backend.dto.UserDto;
 import com.backend.entity.Result;
 import com.backend.entity.User;
+import com.backend.entity.Video;
 import com.backend.mapper.UserMapper;
+import com.backend.service.LikeService;
 import com.backend.service.MyUserDetailsService;
 import com.backend.service.UserService;
 import com.backend.service.VideoService;
 import com.backend.vo.MyWorksVO;
+import com.backend.vo.VideoVO;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -30,6 +33,9 @@ public class userController {
 
     @Resource
     private VideoService videoService;
+
+    @Resource
+    private LikeService likeService;
 
     @GetMapping("/{id}")
     public Result<UserDto> getUserById(@PathVariable Integer id) {
@@ -79,5 +85,17 @@ public class userController {
         List<MyWorksVO> myWorks = videoService.getMyWorksByUserId(authorId);
 
         return Result.SUCCEED(myWorks);
+    }
+
+    /**
+     * 获取个人点赞的视频
+     * @param userId 用户id
+     * @return
+     */
+    @GetMapping("/getLikeVideos/{user_id}")
+    public Result<List<VideoVO>> getLikeVideos(@PathVariable("user_id") Long userId){
+        List<VideoVO> myLikeVideos = likeService.getLikeVideosByUserId(userId);
+
+        return Result.SUCCEED(myLikeVideos);
     }
 }

@@ -9,12 +9,12 @@
             <result property="videoUrl" column="video_url" jdbcType="VARCHAR"/>
             <result property="description" column="description" jdbcType="VARCHAR"/>
             <result property="cover" column="cover" jdbcType="VARCHAR"/>
-            <result property="likes" column="like" jdbcType="BIGINT"/>
-            <result property="shares" column="share" jdbcType="BIGINT"/>
+            <result property="likes" column="likes" jdbcType="BIGINT"/>
+            <result property="shares" column="shares" jdbcType="BIGINT"/>
             <result property="collection" column="collection" jdbcType="BIGINT"/>
             <result property="flag" column="flag" jdbcType="VARCHAR"/>
             <result property="categoryId" column="category_id" jdbcType="INTEGER"/>
-            <result property="video_status" column="status" jdbcType="INTEGER"/>
+            <result property="video_status" column="video_status" jdbcType="INTEGER"/>
             <result property="permission" column="permission" jdbcType="INTEGER"/>
             <result property="publishTime" column="publish_time" jdbcType="TIMESTAMP"/>
             <result property="authorId" column="author_id" jdbcType="BIGINT"/>
@@ -22,9 +22,18 @@
 
     <sql id="Base_Column_List">
         id,video_url,description,
-        cover,like,share,
+        cover,likes,shares,
         collection,flag,category_id,
-        status,permission,publish_time,
+        video_status,permission,publish_time,
         author_id
     </sql>
+
+    <!--多个视频Id查询视频列表-->
+    <select id="selectVideosByIds" resultType="com.backend.vo.VideoVO">
+        SELECT id, video_url, likes FROM video
+        WHERE id IN
+        <foreach collection="videoIds" item="videoId" open="(" separator="," close=")">
+            #{videoId}
+        </foreach>
+    </select>
 </mapper>

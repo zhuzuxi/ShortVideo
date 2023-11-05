@@ -8,6 +8,7 @@ import com.backend.entity.User;
 import com.backend.mapper.UserMapper;
 import com.backend.util.fileUtils;
 import com.backend.vo.MyWorksVO;
+import com.backend.vo.VideoVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -220,6 +221,16 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
     @Override
     public List<MyWorksVO> getMyWorksByUserId(Long authorId) {
         return videoMapper.selectMyWorksVOByAuthorId(authorId);
+    }
+
+    /**
+     * 根据多个视频id获取视频列表
+     * @param ids
+     * @return
+     */
+    @Override
+    public List<VideoVO> getVideoVOByIds(List<Long> ids) {
+        return videoMapper.selectVideosByIds(ids);
     }
 }
 

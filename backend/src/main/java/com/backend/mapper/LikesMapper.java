@@ -3,6 +3,10 @@ package com.backend.mapper;
 import com.backend.entity.Likes;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
 * @author oo
@@ -13,6 +17,8 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface LikesMapper extends BaseMapper<Likes> {
 
+    @Select("select video_id from likes where user_id = #{userId}")
+    public List<Long> getLikeVideoIdsByUserId(Long UserId);
 }
 
 
