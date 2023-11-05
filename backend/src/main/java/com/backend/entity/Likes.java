@@ -6,10 +6,10 @@ import lombok.Data;
 
 /**
  * 
- * @TableName like
+ * @TableName likes 用户点赞表
  */
 @Data
-public class Like implements Serializable {
+public class Likes implements Serializable {
     /**
      * 序号
      */
@@ -18,17 +18,17 @@ public class Like implements Serializable {
     /**
      * 
      */
-    private Integer userid;
+    private Integer user_id;
 
     /**
      * 
      */
-    private Integer videoid;
+    private Integer video_id;
 
     /**
      * 点赞时间
      */
-    private Date likeDatetime;
+    private Date like_time;
 
     private static final long serialVersionUID = 1L;
 }

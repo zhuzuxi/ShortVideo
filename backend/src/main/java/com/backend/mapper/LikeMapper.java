@@ -1,6 +1,6 @@
 package com.backend.mapper;
 
-import com.backend.entity.Like;
+import com.backend.entity.Likes;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -11,7 +11,7 @@ import org.apache.ibatis.annotations.Mapper;
 * @Entity com.backend.entity.Like
 */
 @Mapper
-public interface LikeMapper extends BaseMapper<Like> {
+public interface LikeMapper extends BaseMapper<Likes> {
 
 }
 

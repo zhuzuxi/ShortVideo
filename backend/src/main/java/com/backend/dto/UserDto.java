@@ -17,15 +17,6 @@ public class UserDto {
      *
      */
 
-    /**
-     *
-     */
-    private String sex;
-
-    /**
-     *
-     */
-    private Integer age;
 
     /**
      * 用户喜欢的类型或者发布视频的类型 用','分隔

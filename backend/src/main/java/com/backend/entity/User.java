@@ -60,5 +60,10 @@ public class User implements Serializable {
      */
     private Long follows;
 
+    /**
+     * 获赞数
+     */
+    private Long likes;
+
     private static final long serialVersionUID = 1L;
 }
