@@ -5,10 +5,7 @@ import com.backend.entity.Result;
 import com.backend.entity.User;
 import com.backend.entity.Video;
 import com.backend.mapper.UserMapper;
-import com.backend.service.LikeService;
-import com.backend.service.MyUserDetailsService;
-import com.backend.service.UserService;
-import com.backend.service.VideoService;
+import com.backend.service.*;
 import com.backend.vo.MyWorksVO;
 import com.backend.vo.VideoVO;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -36,6 +33,9 @@ public class userController {
 
     @Resource
     private LikeService likeService;
+
+    @Resource
+    private CollectionsService collectionsService;
 
     @GetMapping("/{id}")
     public Result<UserDto> getUserById(@PathVariable Integer id) {
@@ -98,4 +98,12 @@ public class userController {
 
         return Result.SUCCEED(myLikeVideos);
     }
+
+    @GetMapping("/getCollectVideos/{user_id}")
+    public Result<List<VideoVO>> getCollectVideos(@PathVariable("user_id") Long userId){
+        List<VideoVO> collectVideos = collectionsService.getCollectVideosByUserId(userId);
+
+        return Result.SUCCEED(collectVideos);
+    }
+
 }

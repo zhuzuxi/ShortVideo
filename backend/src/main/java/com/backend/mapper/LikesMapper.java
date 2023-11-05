@@ -17,6 +17,7 @@ import java.util.List;
 @Mapper
 public interface LikesMapper extends BaseMapper<Likes> {
 
+    /*获取用户收藏的所有视频id*/
     @Select("select video_id from likes where user_id = #{userId}")
     public List<Long> getLikeVideoIdsByUserId(Long UserId);
 }

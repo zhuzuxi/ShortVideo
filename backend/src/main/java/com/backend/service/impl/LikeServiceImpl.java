@@ -36,6 +36,9 @@ public class LikeServiceImpl extends ServiceImpl<LikesMapper, Likes>
     @Override
     public List<VideoVO> getLikeVideosByUserId(Long userId) {
         List<Long> videoIds = likesMapper.getLikeVideoIdsByUserId(userId);
+        if(videoIds.isEmpty()){
+            return null;    //没有点赞过视频
+        }
         return videoService.getVideoVOByIds(videoIds);
     }
 }

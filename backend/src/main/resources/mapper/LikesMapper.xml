@@ -7,7 +7,7 @@
     <resultMap id="BaseResultMap" type="com.backend.entity.Likes">
             <result property="user_id" column="user_id" jdbcType="INTEGER"/>
             <result property="video_id" column="video_id" jdbcType="INTEGER"/>
-            <result property="like_time" column="like_datetime" jdbcType="TIMESTAMP"/>
+            <result property="like_time" column="like_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">
