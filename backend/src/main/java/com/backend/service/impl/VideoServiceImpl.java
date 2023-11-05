@@ -1,5 +1,6 @@
 package com.backend.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.backend.common.Constant;
 import com.backend.dto.VideoUserDto;
 import com.backend.entity.Result;
@@ -20,15 +21,15 @@ import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.util.Auth;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Pipeline;
 
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.concurrent.LinkedBlockingDeque;
 
 /**
 * @author oo
@@ -62,7 +63,7 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
     String localFilePath = "D:\\qiniuyun_data\\videos";
 
     @Override
-    //D:\qiniuyun_data\videos 该路径下直接是视频了 你可以优化一下 做个递归获取这个路径下所有视频文件
+    //D:\qiniuyun_data\videos 该路径下的所有视频
     public void uploadVideo(String localFilePath) {
         String bucket="xzqmsgh";
         String key=null;
@@ -113,8 +114,9 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
         return finalUrl;
     }
 
+
     /**
-     * 需要考虑 300条视频刷完之后 该如何refresh 和 解决重复刷到的问题
+     * 需要考虑 30条视频刷完之后 该如何refresh 和 解决重复刷到的问题
      *
      * @param pagenum
      * @return
@@ -127,12 +129,61 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
          */
         QueryWrapper<Video> videoQueryWrapper = new QueryWrapper<>();
         videoQueryWrapper.orderByDesc("shares","'collection'","likes");
+
         Page<Video> page=new Page<>(pagenum,30);
         Page<Video> videoPage = videoMapper.selectPage(page, videoQueryWrapper);
         if (Objects.isNull(videoPage.getRecords())){
             return Result.ERR(500,"网络异常请稍后再试",null);
         }
         List<Video> videoList = videoPage.getRecords();
+
+
+//        System.out.println(String.format("video.size=%d",videoList.size()));
+
+        /**
+         * 获得作者对象列表
+         */
+        List<Long> authorIdList=new ArrayList<>();
+        for (Video record : videoList) {
+            authorIdList.add(record.getAuthorId());
+        }
+
+        QueryWrapper<User> userQueryWrapper=new QueryWrapper<>();
+        userQueryWrapper.in("id",authorIdList);
+        List<User> userList = userMapper.selectList(userQueryWrapper);
+
+
+        /**
+         * 拼接成 VideoUserDto
+         */
+        List<VideoUserDto> videoUserDtoList = new ArrayList<>();
+        for (int i=0;i<videoList.size();i++){
+            videoUserDtoList.add(new VideoUserDto(videoList.get(i),userMapper.selectById(videoList.get(i).getAuthorId())));
+        }
+
+
+        Collections.shuffle(videoUserDtoList);
+        return Result.SUCCEED(String.format("获取第%d页成功",pagenum),videoUserDtoList);
+    }
+
+
+    /**
+     *
+     * @param
+     * @return
+     */
+//    public Result<List<VideoUserDto>> recommendVideosV2(Integer pagenum) {
+//
+//    }
+//
+    public void initVideoPoolInRedis(){
+
+        /**
+         * 获取所有的video
+         */
+        QueryWrapper<Video> videoQueryWrapper = new QueryWrapper<>();
+//        videoQueryWrapper.orderByDesc("shares","'collection'","likes");
+        List<Video> videoList = videoMapper.selectList(videoQueryWrapper);
 
         /**
          * 获得作者对象列表
@@ -145,19 +196,24 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
         userQueryWrapper.in("id",authorIdList);
         List<User> userList = userMapper.selectList(userQueryWrapper);
 
-
-        /**
-         * 拼接成 VideoUserDto
-         */
         List<VideoUserDto> videoUserDtoList = new ArrayList<>();
+        Jedis jedis = new Jedis();
+        Pipeline pipelined = jedis.pipelined();
         for (int i=0;i<userList.size();i++){
-            videoUserDtoList.add(new VideoUserDto(videoList.get(i),userList.get(i)));
+            HashMap<String, String> map = new HashMap<>();
+            String key=Constant.REDIS_VIDEOUSERDTO_PRE+videoUserDtoList.get(i).getVideo().getId();
+            String value= JSONObject.toJSONString(videoUserDtoList.get(i));
+            map.put(key,value);
+            pipelined.hset(Constant.REDIS_VIDEOUSERDTO_MAP_KEY_PRE,map);
         }
 
+        pipelined.sync();
+        pipelined.close();
 
-        Collections.shuffle(videoUserDtoList);
-        return Result.SUCCEED(String.format("获取第%d页成功",pagenum),videoUserDtoList);
+
+
     }
+
 }
 
 

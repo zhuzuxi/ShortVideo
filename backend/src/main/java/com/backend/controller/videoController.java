@@ -6,6 +6,8 @@ import com.backend.entity.Video;
 import com.backend.mapper.VideoMapper;
 import com.backend.service.VideoService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.qiniu.util.Auth;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -36,10 +38,13 @@ public class videoController {
         return videoService.recommendVideos(pagenum);
     }
 
+    @Resource(name = "myAuth")
+    private Auth auth;
     //新增视频
-    @PostMapping
-    public Result addVideo(){
-        return null;
+    @GetMapping("/uploadtoken")
+    public Result<String> getUpLoadToken(@RequestParam String bucket){
+        String upToken = auth.uploadToken(bucket);
+        return Result.SUCCEED("上传凭证",upToken);
     }
 
 }

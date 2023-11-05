@@ -18,4 +18,6 @@ public interface VideoService extends IService<Video> {
     public String getUrl(String key);
 
     Result<List<VideoUserDto>> recommendVideos(Integer pagenum);
+
+
 }

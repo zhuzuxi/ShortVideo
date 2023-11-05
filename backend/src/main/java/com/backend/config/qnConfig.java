@@ -16,7 +16,8 @@ public class qnConfig {
 
     @Value("${qiniu.secretKey}")
     private String secretKey;
-    @Bean
+
+    @Bean(name = "myAuth")
     public Auth auth(){
         return Auth.create(accessKey,secretKey);
     }
