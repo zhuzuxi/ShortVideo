@@ -1,6 +1,8 @@
 package com.backend.service;
 
+import com.backend.dto.VideoUserDto;
 import com.backend.entity.Video;
+import com.backend.mapper.UserMapper;
 import com.backend.mapper.VideoMapper;
 import com.google.gson.Gson;
 import com.qiniu.common.QiniuException;
@@ -38,50 +40,26 @@ public class VideoServiceTest {
     @Test
     void testupload(){
         String localFilePath = "D:\\qiniuyun_data\\videos";//这里输入
-        videoService.uploadVideo(localFilePath);
-    }
+        videoService.uploadVideo(localFilePath);}
+
 
     @Resource
     private VideoMapper videoMapper;
 
 
-    @Resource
-    private Auth auth;
-
-    @Resource
-    private UploadManager uploadManager;
     @Test
-    public void uploadVideo() throws UnsupportedEncodingException {
-        String bucket="xzqmsgh";
-        String key=null;
-        String upToken = auth.uploadToken(bucket);
-//如果是Windows情况下，格式是 D:\\qiniu\\test.png
-        String localFilePath = "D:\\qiniuyun_data\\videos";
-        File file=new File(localFilePath);
-        for (File listFile : file.listFiles()) {
-            try {
-                Response response = uploadManager.put(listFile.getAbsolutePath(), key, upToken);
-                //解析上传成功的结果
-                DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
-                Video video = new Video();
-                video.setVideoUrl(putRet.key);
-                videoMapper.insert(video);
-
-            } catch (QiniuException ex) {
-                ex.printStackTrace();
-                if (ex.response != null) {
-                    System.err.println(ex.response);
-
-                    try {
-                        String body = ex.response.toString();
-                        System.err.println(body);
-                    } catch (Exception ignored) {
-                    }
-                }
-            }
+    void testcommend(){
+        for (VideoUserDto videoUserDto : videoService.recommendVideos(1).getData()) {
+            System.out.println(videoUserDto);
         }
-
     }
 
+    @Resource(name = "myAuth")
+    private Auth auth;
+    @Test
+    void uploadtoken(){
+        String upToken = auth.uploadToken("xzqmsgh");
+        System.out.println(upToken);
+    }
 
 }

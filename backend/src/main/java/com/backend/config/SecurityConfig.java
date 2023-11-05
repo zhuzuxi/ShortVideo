@@ -11,6 +11,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.AntPathMatcher;
 
+import javax.annotation.Resource;
+
 /**
  * ClassName: SecurityConfigTest
  * Package: com.backend.config
@@ -23,7 +25,7 @@ import org.springframework.util.AntPathMatcher;
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
+    @Resource
     private UserDetailsService userDetailsService;
 
     /*
