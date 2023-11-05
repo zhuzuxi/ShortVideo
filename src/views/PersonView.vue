@@ -2,7 +2,7 @@
   <div>
     <Content>
       <template #left class="left">
-        <a-button type="primary" danger class="gh_button back" @click="back"> 返回 </a-button>
+        <a-button type="primary" danger class="gh_button back" @click="back"> 返回首页 </a-button>
         <a-button type="primary" class="gh_button"> 作品</a-button>
         <a-button type="default" class="gh_button">点赞</a-button>
         <a-button type="default" class="gh_button">收藏</a-button>
@@ -72,7 +72,7 @@ const fans = () => {
 }
 
 const back = () => {
-  router.back()
+  router.push('/')
 }
 </script>
 <style scoped lang="less">

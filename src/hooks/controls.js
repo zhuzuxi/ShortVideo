@@ -4,7 +4,8 @@
  *
  */
 
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
+import { useRoute } from 'vue-router'
 
 export const controls = (video) => {
   // 视频播放暂停
@@ -100,74 +101,54 @@ export const controls = (video) => {
     video.value.requestFullscreen()
   }
 
+  // const route = useRoute()
   // 键盘事件
   let isKeyPressed = false //长按
-  let timer // 定时器
+  // let timer // 定时器
   //按钮监听键盘
-  const keyDown = () => {
+  const keyDown = (event) => {
     //监听键盘按钮
-    document.onkeyup = function (event) {
-      const e = event || window.event
-      const keyCode = e.keyCode || e.which
-      switch (keyCode) {
-        case 32: //space
-          play()
-          break
-        case 37: //<-
-          forward(false)
-          break
-        case 38: //↑
-          alert('↑')
-          break
-        case 39: //->
-          forward(true)
-          break
-        case 40: //↓
-          alert('↓')
-          break
-        case 13: //enter
-          alert('enter')
-          break
-        case 77: //enter
-          mute()
-          break
-        default:
-          console.log(keyCode)
-          break
-      }
-      if (e && e.preventDefault) {
-        e.preventDefault()
-      } else {
-        window.event.returnValue = false
-      }
+    const e = event || window.event
+    const keyCode = e.keyCode || e.which
+    switch (keyCode) {
+      case 32: //space
+        play()
+        break
+      case 37: //<-
+        forward(false)
+        break
+      case 38: //↑
+        alert('↑')
+        break
+      case 39: //->
+        forward(true)
+        break
+      case 40: //↓
+        alert('↓')
+        break
+      case 13: //enter
+        alert('enter')
+        break
+      case 77: //enter
+        mute()
+        break
+      default:
+        console.log(keyCode)
+        break
     }
-    // 监听键盘长按
-    // document.onkeydown = function (event) {
-    //   const e = event || window.event
-    //   const keyCode = e.keyCode || e.which
-    //   switch (keyCode) {
-    //     case 37: //<-
-    //       // forward(false)
-    //       console.log(keyCode)
-    //       break
-    //     case 39: //->
-    //       speedPlay()
-    //       break
-    //     default:
-    //       console.log(keyCode)
-    //       break
-    //   }
-    //   if (e && e.preventDefault) {
-    //     e.preventDefault()
-    //   } else {
-    //     window.event.returnValue = false
-    //   }
-    // }
+    if (e && e.preventDefault) {
+      e.preventDefault()
+    } else {
+      window.event.returnValue = false
+    }
   }
 
   onMounted(() => {
     // 调用键盘事件监听
-    keyDown()
+    document.addEventListener('keyup', keyDown)
+  })
+  onUnmounted(() => {
+    document.removeEventListener('keyup', keyDown)
   })
 
   // 倍速播放

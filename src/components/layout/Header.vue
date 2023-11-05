@@ -1,7 +1,7 @@
 <template>
   <div class="header">
-    <div class="logo">小🐖骑🐎赏桂❀</div>
-    <!-- <div class="logo">
+    <div class="logo" @click="router.push('/')">小🐖骑🐎赏桂❀</div>
+    <!-- <div class="logo" @click="router.push('/')">
       <img src="@/assets/logo.jpg" alt="" />
     </div> -->
     <div class="search" v-if="route.fullPath === '/'">
@@ -28,7 +28,6 @@ import { PlusCircleOutlined } from '@ant-design/icons-vue'
 const router = useRouter()
 const route = useRoute()
 const value = ref('')
-console.log()
 
 const toUpload = () => {
   router.push('/upload')
@@ -54,6 +53,7 @@ const onSearch = (searchValue) => {
     align-items: center;
     border-radius: 0.6vw;
     padding: 0 0.8vw;
+    cursor: pointer;
     // width: 11vw;
     background-color: gold;
   }

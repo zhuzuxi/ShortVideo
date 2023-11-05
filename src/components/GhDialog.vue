@@ -59,8 +59,6 @@ import { ref } from 'vue'
 import { useBusinessStore } from '@/stores/business.js'
 
 // 从 pinia 中引入 state 和 方法
-// 直接解构拿到的不是响应式数据
-// const { dialogFlag, changeDialog, isPannalActive, changePannal } = useBusinessStore()
 const store = useBusinessStore()
 
 const isFollow = ref(false) // followed flag

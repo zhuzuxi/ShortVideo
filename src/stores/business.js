@@ -18,7 +18,6 @@ export const useBusinessStore = defineStore('business', () => {
     } else {
       isPannalActive.value = false
     }
-    console.log(isPannalActive)
   }
 
   return { dialogFlag, changeDialog, isPannalActive, changePannal }
