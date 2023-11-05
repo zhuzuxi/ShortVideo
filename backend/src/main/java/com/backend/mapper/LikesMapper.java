@@ -11,7 +11,7 @@ import org.apache.ibatis.annotations.Mapper;
 * @Entity com.backend.entity.Like
 */
 @Mapper
-public interface LikeMapper extends BaseMapper<Likes> {
+public interface LikesMapper extends BaseMapper<Likes> {
 
 }
 

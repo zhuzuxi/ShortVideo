@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.backend.mapper.LikesMapper">
+
+    <resultMap id="BaseResultMap" type="com.backend.entity.Likes">
+            <result property="user_id" column="user_id" jdbcType="INTEGER"/>
+            <result property="video_id" column="video_id" jdbcType="INTEGER"/>
+            <result property="like_time" column="like_datetime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        user_id,video_id,like_time
+    </sql>
+</mapper>

@@ -6,7 +6,7 @@
 
     <resultMap id="BaseResultMap" type="com.backend.entity.User">
             <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="username" column="username" jdbcType="VARCHAR"/>
             <result property="password" column="password" jdbcType="VARCHAR"/>
             <result property="phone" column="phone" jdbcType="VARCHAR"/>
             <result property="img" column="img" jdbcType="VARCHAR"/>

@@ -15,15 +15,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
 
-/**
- * ClassName: UserDetailsService
- * Package: com.backend.service
- * Descirption:
- *
- * @Author QLM
- * @Create 2023/11/2 16:34
- * @Version 1.0
- */
 @Service("userDetailsService")
 public class MyUserDetailsService implements UserDetailsService {
     @Resource
@@ -34,7 +25,7 @@ public class MyUserDetailsService implements UserDetailsService {
         //调用userMapper方法，根据用户查询数据库
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.eq("username",username);
-        User user= userMapper.selectOne(wrapper);
+        User user= userMapper.selectOne(wrapper);       //获取用户实体
         //判断
         if (user==null){//数据库没有用户名，认证失败
             throw  new UsernameNotFoundException("用户名不存在！");

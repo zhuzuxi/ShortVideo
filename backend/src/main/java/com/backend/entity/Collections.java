@@ -9,7 +9,6 @@ import java.util.Date;
  */
 @Data
 public class Collections {
-
     private Long user_id;
     private Long video_id;
     private Date collect_time;

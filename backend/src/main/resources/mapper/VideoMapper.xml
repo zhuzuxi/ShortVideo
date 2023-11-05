@@ -9,12 +9,12 @@
             <result property="videoUrl" column="video_url" jdbcType="VARCHAR"/>
             <result property="description" column="description" jdbcType="VARCHAR"/>
             <result property="cover" column="cover" jdbcType="VARCHAR"/>
-            <result property="like" column="like" jdbcType="BIGINT"/>
-            <result property="share" column="share" jdbcType="BIGINT"/>
+            <result property="likes" column="like" jdbcType="BIGINT"/>
+            <result property="shares" column="share" jdbcType="BIGINT"/>
             <result property="collection" column="collection" jdbcType="BIGINT"/>
             <result property="flag" column="flag" jdbcType="VARCHAR"/>
             <result property="categoryId" column="category_id" jdbcType="INTEGER"/>
-            <result property="status" column="status" jdbcType="INTEGER"/>
+            <result property="video_status" column="status" jdbcType="INTEGER"/>
             <result property="permission" column="permission" jdbcType="INTEGER"/>
             <result property="publishTime" column="publish_time" jdbcType="TIMESTAMP"/>
             <result property="authorId" column="author_id" jdbcType="BIGINT"/>
