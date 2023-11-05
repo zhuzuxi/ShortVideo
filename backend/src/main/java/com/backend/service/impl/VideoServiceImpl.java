@@ -7,6 +7,7 @@ import com.backend.entity.Result;
 import com.backend.entity.User;
 import com.backend.mapper.UserMapper;
 import com.backend.util.fileUtils;
+import com.backend.vo.MyWorksVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -209,11 +210,17 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
 
         pipelined.sync();
         pipelined.close();
-
-
-
     }
 
+    /**
+     * 根据用户id获取用户个人作品
+     * @param authorId  视频作者id
+     * @return
+     */
+    @Override
+    public List<MyWorksVO> getMyWorksByUserId(Long authorId) {
+        return videoMapper.selectMyWorksVOByAuthorId(authorId);
+    }
 }
 
 

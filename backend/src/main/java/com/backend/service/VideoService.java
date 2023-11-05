@@ -3,6 +3,7 @@ package com.backend.service;
 import com.backend.dto.VideoUserDto;
 import com.backend.entity.Result;
 import com.backend.entity.Video;
+import com.backend.vo.MyWorksVO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -19,5 +20,10 @@ public interface VideoService extends IService<Video> {
 
     Result<List<VideoUserDto>> recommendVideos(Integer pagenum);
 
-
+    /**
+     * 根据用户id获取用户个人作品
+     * @param user_id
+     * @return
+     */
+    List<MyWorksVO> getMyWorksByUserId(Long user_id);
 }

@@ -6,7 +6,10 @@ import com.backend.entity.User;
 import com.backend.mapper.UserMapper;
 import com.backend.service.MyUserDetailsService;
 import com.backend.service.UserService;
+import com.backend.service.VideoService;
+import com.backend.vo.MyWorksVO;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 import java.util.Objects;
 
 @RestController
@@ -23,6 +27,9 @@ public class userController {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private VideoService videoService;
 
     @GetMapping("/{id}")
     public Result<UserDto> getUserById(@PathVariable Integer id) {
@@ -60,5 +67,17 @@ public class userController {
         //将User信息存入当前会话中
         session.setAttribute("user",user);
         return Result.SUCCEED(user);
+    }
+
+    /**
+     * 获取用户个人作品
+     * @param authorId   视频作者id
+     * @return
+     */
+    @GetMapping("/getMyWorks/{user_id}")
+    public Result<List<MyWorksVO>> getMyWorks(@PathVariable("user_id") Long authorId){
+        List<MyWorksVO> myWorks = videoService.getMyWorksByUserId(authorId);
+
+        return Result.SUCCEED(myWorks);
     }
 }
