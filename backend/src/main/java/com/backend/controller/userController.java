@@ -7,6 +7,7 @@ import com.backend.entity.Video;
 import com.backend.mapper.UserMapper;
 import com.backend.service.*;
 import com.backend.vo.MyWorksVO;
+import com.backend.vo.UserVO;
 import com.backend.vo.VideoVO;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,6 +100,11 @@ public class userController {
         return Result.SUCCEED(myLikeVideos);
     }
 
+    /**
+     * 获取用户收藏的视频
+     * @param userId
+     * @return
+     */
     @GetMapping("/getCollectVideos/{user_id}")
     public Result<List<VideoVO>> getCollectVideos(@PathVariable("user_id") Long userId){
         List<VideoVO> collectVideos = collectionsService.getCollectVideosByUserId(userId);
@@ -106,4 +112,28 @@ public class userController {
         return Result.SUCCEED(collectVideos);
     }
 
+    /**
+     * 获取关注列表
+     * @param userId
+     * @return
+     */
+    @GetMapping("/getFollows/{user_id}")
+    public Result<List<UserVO>> getFollows(@PathVariable("user_id") Long userId){
+        List<UserVO> follows = userService.getFollows(userId);
+
+        return Result.SUCCEED(follows);
+    }
+
+
+    /**
+     * 获取粉丝列表
+     * @param userId
+     * @return
+     */
+    @GetMapping("/getFans/{user_id}")
+    public Result<List<UserVO>> getFans(@PathVariable("user_id") Long userId){
+        List<UserVO> follows = userService.getFans(userId);
+
+        return Result.SUCCEED(follows);
+    }
 }

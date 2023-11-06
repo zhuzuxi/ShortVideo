@@ -21,6 +21,15 @@ public class UserFollows implements Serializable {
      */
     private Long followId;
 
+
+    /**
+     * 关注状态
+     * user_id = A
+     * follow_id = B
+     * status = 0 -> B未关注A，1 -> AB相互关注
+     */
+    private Integer status;
+
     /**
      * 关注时间
      */
