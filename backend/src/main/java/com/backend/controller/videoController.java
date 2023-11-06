@@ -47,4 +47,10 @@ public class videoController {
         return Result.SUCCEED("上传凭证",upToken);
     }
 
+    @GetMapping("/videos/flags")
+    public Result<VideoUserDto> getVideosByFlag(@RequestParam String flag,@RequestParam(defaultValue = "1") Integer pagenum){
+
+        return videoService.getVideosByFlag(flag,pagenum);
+    }
+
 }

@@ -21,6 +21,7 @@ import com.qiniu.http.Response;
 import com.qiniu.storage.UploadManager;
 import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.util.Auth;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
@@ -140,8 +141,15 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
         List<Video> videoList = videoPage.getRecords();
 
 
-//        System.out.println(String.format("video.size=%d",videoList.size()));
+        List<VideoUserDto> videoUserDtoList = getVideoUserDtos(videoList);
 
+
+        Collections.shuffle(videoUserDtoList);
+        return Result.SUCCEED(String.format("获取第%d页成功",pagenum),videoUserDtoList);
+    }
+
+    @NotNull
+    private List<VideoUserDto> getVideoUserDtos(List<Video> videoList) {
         /**
          * 获得作者对象列表
          */
@@ -159,13 +167,10 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
          * 拼接成 VideoUserDto
          */
         List<VideoUserDto> videoUserDtoList = new ArrayList<>();
-        for (int i=0;i<videoList.size();i++){
+        for (int i = 0; i< videoList.size(); i++){
             videoUserDtoList.add(new VideoUserDto(videoList.get(i),userMapper.selectById(videoList.get(i).getAuthorId())));
         }
-
-
-        Collections.shuffle(videoUserDtoList);
-        return Result.SUCCEED(String.format("获取第%d页成功",pagenum),videoUserDtoList);
+        return videoUserDtoList;
     }
 
 
@@ -231,6 +236,17 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
     @Override
     public List<VideoVO> getVideoVOByIds(List<Long> ids) {
         return videoMapper.selectVideosByIds(ids);
+    }
+
+    @Override
+    public Result<VideoUserDto> getVideosByFlag(String flag, Integer pagenum) {
+        QueryWrapper<Video> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("flag",flag);
+        Page<Video> page = new Page<>(pagenum,30);
+        Page<Video> videoPage = videoMapper.selectPage(page,queryWrapper);
+        List<Video> videos = videoPage.getRecords();
+        List<VideoUserDto> videoUserDtos = getVideoUserDtos(videos);
+        return Result.SUCCEED("获取成功",videoUserDtos);
     }
 }
 

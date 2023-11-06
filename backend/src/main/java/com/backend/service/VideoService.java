@@ -34,4 +34,7 @@ public interface VideoService extends IService<Video> {
      * @return
      */
     List<VideoVO> getVideoVOByIds(List<Long> ids);
+
+    Result<VideoUserDto> getVideosByFlag(String flag, Integer pagenum);
+
 }
