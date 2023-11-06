@@ -15,17 +15,36 @@
         >
           <div class="select">
             <a-form-item class="video_upload" has-feedback>
-              <a-upload-dragger name="video" class="video" :customRequest="customRequestHandler">
-                <p class="ant-upload-text">视频上传</p>
-                <p class="ant-upload-hint">仅支持上传单个文件，格式为 mp4</p>
-              </a-upload-dragger>
+              <div class="upload_button" @click="uploadVideo">
+                <a-button type="primary">上传视频</a-button>
+              </div>
+              <input type="file" ref="videoInput" class="video" @change="videoChange" />
+              <video controls class="video_box" v-if="videoUrl !== ''">
+                <source :src="videoUrl" />
+              </video>
+              <a-button
+                type="primary"
+                class="delete"
+                danger
+                v-if="videoUrl !== ''"
+                @click="deleteUrl(true)"
+                >删除</a-button
+              >
             </a-form-item>
             <a-form-item class="post_upload">
-              <a-upload-dragger name="file" :customRequest="uploadPost">
-                <p><DeleteColumnOutlined /></p>
-                <p class="ant-upload-text">图片上传</p>
-                <p class="ant-upload-hint">仅支持上传单个文件，格式为 JPEG、PNG</p>
-              </a-upload-dragger>
+              <div class="upload_button" @click="uploadPost">
+                <a-button type="primary">上传封面</a-button>
+              </div>
+              <input type="file" ref="postInput" class="post" @change="postChange" />
+              <img class="post_img" :src="imgUrl" alt="" />
+              <a-button
+                type="primary"
+                class="delete"
+                danger
+                v-if="imgUrl !== ''"
+                @click="deleteUrl(false)"
+                >删除</a-button
+              >
             </a-form-item>
           </div>
           <div class="info">
@@ -55,7 +74,7 @@
               <a-form-item class="select">
                 <a-select
                   v-model:selected="formState.selected"
-                  @change="handleChange"
+                  @change="selectedChange"
                   placeholder="请选择视频分区"
                 >
                   <a-select-option v-for="item in videoArea" :value="item">{{
@@ -78,134 +97,44 @@
 </template>
 <script setup>
 import Content from '@/components/layout/Content.vue'
-
+import { useForm } from '@/hooks/form.js'
+import { useUpload } from '@/hooks/upload.js'
 import { ref, reactive, computed, toRaw } from 'vue'
 import { useRouter } from 'vue-router'
-import { Form, message } from 'ant-design-vue'
 import * as qiniu from 'qiniu-js'
 
 const router = useRouter()
-// const checked = ref(false)
-// const selected = ref('')
-const title = ref('')
-const profile = ref('')
-const subTitle = ref('')
-const videoArea = ref(['旅游', '体育', '生活', '娱乐'])
 
-// 表单相关
-const formRef = ref('')
-const useForm = Form.useForm
-const formState = reactive({
-  title: '',
-  subTitle: '',
-  profile: '',
-  checked: false,
-  selected: false
-})
-const rules = {
-  title: [
-    {
-      required: true,
-      message: 'Please input title',
-      trigger: 'change'
-    }
-  ],
-  subTitle: [
-    {
-      required: true,
-      message: 'Please input subTitle',
-      trigger: 'change'
-    }
-  ],
-  profile: [
-    {
-      required: true,
-      message: 'Please input profile',
-      trigger: 'change'
-    }
-  ]
-}
-
-// let validatePass =
-
-const { resetFields, validate } = useForm(formState, rules)
-const helpMsg = ref({})
-
-const myValidate = (e) => {
-  // console.log(e)
-  validate()
-    .then(() => {
-      helpMsg.value = []
-      console.log(helpMsg.value)
-      console.log(toRaw(formState))
-    })
-    .catch((err) => {
-      helpMsg.value = []
-      const errs = err.errorFields
-      for (let item in errs) {
-        helpMsg.value[errs[item].name] = errs[item].errors[0]
-      }
-      console.log(helpMsg.value)
-    })
-}
-
-const submit = () => {
-  myValidate()
-}
-const resetForm = () => {
-  formRef.value.resetFields()
-}
-
-const handleChange = (value) => {
-  formState.selected = value
-}
 const back = () => {
   router.push('/')
 }
 
-// 文件上传
-const token =
-  'w3VdBuR5aZoHP-v3NIjNJiOh0DwEq5Fh9EtQj1rM:CQVqAh1ZCVRZhr5ahdgUkGiIpw4=:eyJzY29wZSI6Inh6cW1zZ2giLCJkZWFkbGluZSI6MTY5OTIwODY3Mn0='s
+const {
+  formRef,
+  videoArea,
+  formState,
+  rules,
+  helpMsg,
+  myValidate,
+  submit,
+  resetForm,
+  selectedChange
+} = useForm()
 
-const customRequestHandler = (info) => {
-  // 文件上传 自定义
-  // console.log(info.file.name)
-  // info.file.status = 'uploading'
-  // 初始化七牛云的上传器
-  const config = {
-    useCdnDomain: true,
-    region: qiniu.region.z2,
-    disableStatisticsReport: false,
-    retryCount: 6
-  }
-  const putExtra = {
-    fname: '',
-    params: {},
-    mimeType: null
-  }
-  const observer = {
-    next(res) {
-      // 上传进度中的信息
-      console.log('上传中：', res.total)
-    },
-    error(err) {
-      info.file.status = 'done'
-      console.log('上传失败：', err)
-    },
-    complete(res) {
-      info.file.status = 'done'
-      console.log('上传成功：', res)
-    }
-  }
-  // const observable = qiniu.upload(info.file, info.file.name, token, putExtra, config)
-  // // 上传开始
-  // const subscription = observable.subscribe(observer)
-}
-
-const uploadPost = (info) => {
-  // 图片上传 自定义
-}
+const {
+  videoUrl,
+  imgUrl,
+  postInput,
+  videoInput,
+  customRequestHandler,
+  uploadPost,
+  postChange,
+  uploadVideo,
+  videoChange,
+  deleteUrl
+} = useUpload()
 </script>
+
 <style scoped lang="less">
 .back {
   border-radius: 1vw;
@@ -232,22 +161,63 @@ const uploadPost = (info) => {
     margin-right: 1vw;
 
     .video_upload {
-      width: 100%;
-      border-radius: 0.5vw;
-      background-color: #b2b1b1;
-
-      /deep/.ant-upload-btn {
-        padding: 6vh 0;
-      }
-    }
-    /deep/.ant-upload-btn {
-      padding: 5vh 0;
-    }
-    .post_upload {
+      flex: 1;
       width: 100%;
       margin-top: 1vh;
+      padding-top: 2vh;
       border-radius: 0.5vw;
+      box-sizing: border-box;
+      text-align: center;
+      background-color: #b2b1b1;
+
+      .video {
+        display: none;
+      }
+      .upload_button {
+        text-align: center;
+      }
+      .video_box {
+        height: 30vh;
+        margin-top: 1vh;
+        object-fit: contain;
+      }
+      .delete {
+        position: absolute;
+        right: 4vh;
+        bottom: 4vh;
+        padding: 0 4vh;
+      }
+    }
+    .post_upload {
+      flex: 1;
+      width: 100%;
+      padding-top: 2vh;
+      border-radius: 0.5vw;
+      box-sizing: border-box;
+      text-align: center;
       background-color: #c1c1c1;
+
+      .upload_button {
+        text-align: center;
+      }
+      .post {
+        margin: 2vw;
+        display: none;
+        box-sizing: border-box;
+      }
+
+      .post_img {
+        margin: 1vh 0;
+        height: 30vh;
+        object-fit: contain;
+        background-color: pink;
+      }
+      .delete {
+        position: absolute;
+        right: 4vh;
+        bottom: 4vh;
+        padding: 0 4vh;
+      }
     }
   }
   .info {

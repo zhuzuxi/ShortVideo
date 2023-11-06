@@ -8,9 +8,9 @@
       @loadedmetadata="videoLoaded"
       @timeupdate="getCurrentTime"
       loop
-      disablePictureInPicture
+      v-if="videoShow"
     >
-      <source src="@/assets/1.mp4" />
+      <source v-if="videoList[0]" :src="videoList[0].video.videoUrl" />
     </video>
     <!-- <link rel="preload" as="video" href="https://cdn.com/small-file.mp4" /> -->
 
@@ -93,6 +93,10 @@ const {
   currentTime,
   selected,
   options,
+  baseUrl,
+  videoList,
+  cur,
+  videoShow,
   play,
   changeVolume,
   mute,
@@ -101,7 +105,8 @@ const {
   forward,
   getCurrentTime,
   fullScn,
-  speedChange
+  speedChange,
+  changeVideo
 } = controls(video)
 // console.log(controls(video))
 </script>
