@@ -108,3 +108,5 @@ src 下目录结构
 [项目文档目录](./teamDoc)
 
 > 项目文档以及视频放在 teamDoc 文件夹中，请评委前往查看
+* 如果访问不了 pdf 文件，那可以试试 飞书文档的链接(飞书无法导出md比较难受抱歉)：
+* [飞书--项目文档](https://ciggd85dj8.feishu.cn/docx/OI2BdxzPnopCmlxHoSzc1Ci5nNe?from=from_copylink)
