@@ -15,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/video")
+@CrossOrigin
 public class videoController {
 
     @Resource

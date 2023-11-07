@@ -161,6 +161,10 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
         QueryWrapper<User> userQueryWrapper=new QueryWrapper<>();
         userQueryWrapper.in("id",authorIdList);
         List<User> userList = userMapper.selectList(userQueryWrapper);
+        HashMap<Long, User> UserMap = new HashMap<>();
+        for (User user : userList) {
+            UserMap.put(user.getId(),user);
+        }
 
 
         /**
@@ -168,7 +172,9 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
          */
         List<VideoUserDto> videoUserDtoList = new ArrayList<>();
         for (int i = 0; i< videoList.size(); i++){
-            videoUserDtoList.add(new VideoUserDto(videoList.get(i),userMapper.selectById(videoList.get(i).getAuthorId())));
+            Video video = videoList.get(i);
+            video.setVideoUrl(getUrl(video.getVideoUrl()));
+            videoUserDtoList.add(new VideoUserDto(video,UserMap.get(video.getAuthorId())));
         }
         return videoUserDtoList;
     }
