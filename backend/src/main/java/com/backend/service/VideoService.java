@@ -34,4 +34,18 @@ public interface VideoService extends IService<Video> {
      * @return
      */
     List<VideoVO> getVideoVOByIds(List<Long> ids);
+
+
+    /**
+     * 搜索视频
+     * @param pagenum
+     * @return
+     */
+    Result<List<VideoUserDto>> searchVideos(String key, Integer pagenum);
+
+    /**
+     * 添加视频
+     * @param video
+     */
+    Boolean addVideo(Video video);
 }

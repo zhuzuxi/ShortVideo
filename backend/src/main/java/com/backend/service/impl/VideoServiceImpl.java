@@ -168,6 +168,57 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
         return Result.SUCCEED(String.format("获取第%d页成功",pagenum),videoUserDtoList);
     }
 
+    /**
+     * 按关键字搜索
+     * @param pagenum
+     * @return
+     */
+    @Override
+    public Result<List<VideoUserDto>> searchVideos(String key, Integer pagenum) {
+        /**
+         * 简易的推荐
+         */
+        QueryWrapper<Video> videoQueryWrapper = new QueryWrapper<>();
+        videoQueryWrapper.orderByDesc("shares","'collection'","likes");
+
+        Page<Video> page=new Page<>(pagenum,30);
+        //根据视频描述或者视频标签做模糊查询
+        videoQueryWrapper.lambda().like(Video::getDescription,key)
+                .or().like(Video::getFlag,key);
+        Page<Video> videoPage = videoMapper.selectPage(page, videoQueryWrapper);
+        if (Objects.isNull(videoPage.getRecords())){
+            return Result.ERR(500,"网络异常请稍后再试",null);
+        }
+        List<Video> videoList = videoPage.getRecords();
+
+
+//        System.out.println(String.format("video.size=%d",videoList.size()));
+
+        /**
+         * 获得作者对象列表
+         */
+        List<Long> authorIdList=new ArrayList<>();
+        for (Video record : videoList) {
+            authorIdList.add(record.getAuthorId());
+        }
+
+        QueryWrapper<User> userQueryWrapper=new QueryWrapper<>();
+        userQueryWrapper.in("id",authorIdList);
+        List<User> userList = userMapper.selectList(userQueryWrapper);
+
+
+        /**
+         * 拼接成 VideoUserDto
+         */
+        List<VideoUserDto> videoUserDtoList = new ArrayList<>();
+        for (int i=0;i<videoList.size();i++){
+            videoUserDtoList.add(new VideoUserDto(videoList.get(i),userMapper.selectById(videoList.get(i).getAuthorId())));
+        }
+
+
+        Collections.shuffle(videoUserDtoList);
+        return Result.SUCCEED(String.format("获取第%d页成功",pagenum),videoUserDtoList);
+    }
 
     /**
      *
@@ -231,6 +282,24 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
     @Override
     public List<VideoVO> getVideoVOByIds(List<Long> ids) {
         return videoMapper.selectVideosByIds(ids);
+    }
+
+    /**
+     * 添加视频
+     * @param video
+     */
+    @Override
+    public Boolean addVideo(Video video) {
+        //补充视频信息
+        video.setPublishTime(new Date());
+        video.setVideo_status(1);
+        video.setLikes(0L);
+        video.setLikes(0L);
+        video.setCollection(0L);
+        if(videoMapper.insert(video)==1){
+            return true;
+        }
+        return false;
     }
 }
 
