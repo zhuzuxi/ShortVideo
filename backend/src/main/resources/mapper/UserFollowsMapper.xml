@@ -10,6 +10,6 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        user_id,follow_id
+        user_id,follow_id,follow_status,follow_time
     </sql>
 </mapper>

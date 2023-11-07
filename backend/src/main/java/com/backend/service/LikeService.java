@@ -16,6 +16,13 @@ public interface LikeService extends IService<Likes> {
     /*通过用户id获取点赞过的视频*/
     List<VideoVO> getLikeVideosByUserId(Long userId);
 
+    /**
+     * 用户点赞或取消赞
+     * @param userId
+     * @param videoId
+     */
+    Integer likeOrCancel(Long userId, Long videoId);
+
 //    public void testUpdate();
 
 }
