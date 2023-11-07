@@ -21,10 +21,9 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Objects;
-
+@CrossOrigin
 @RestController
 @RequestMapping("/user")
-@CrossOrigin
 public class userController {
 
     @Resource

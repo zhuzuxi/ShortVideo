@@ -13,6 +13,8 @@ import javax.servlet.http.HttpSession;
 /**
  * 用户点赞/取消点赞
  */
+@CrossOrigin
+
 @RestController
 @RequestMapping("/interact")
 public class InteractController {

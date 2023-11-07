@@ -9,7 +9,6 @@ spring:
       password: vviyht7846.
       url: jdbc:mysql://47.113.144.50:3306/shortvideo?serverTimezone=GMT%2B8
 
-
 qiniu:
   domainOfBucket : http://s3c51zvtx.hn-bkt.clouddn.com
   accessKey : w3VdBuR5aZoHP-v3NIjNJiOh0DwEq5Fh9EtQj1rM

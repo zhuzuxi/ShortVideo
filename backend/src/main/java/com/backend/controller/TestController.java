@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/test")
-@CrossOrigin
 public class TestController {
 
     @GetMapping("hello")

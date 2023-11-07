@@ -15,10 +15,9 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.List;
-
+@CrossOrigin
 @RestController
 @RequestMapping("/video")
-@CrossOrigin
 public class videoController {
 
     @Resource

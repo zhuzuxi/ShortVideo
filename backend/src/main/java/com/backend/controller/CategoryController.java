@@ -20,9 +20,9 @@ import java.util.List;
  * @Create 2023/11/3 14:19
  * @Version 1.0
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/category")
-@CrossOrigin
 public class CategoryController {
     @Autowired
     private VideoCategoryService videoCategoryService;
