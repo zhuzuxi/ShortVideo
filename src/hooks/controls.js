@@ -10,7 +10,7 @@ import { useBusinessStore } from '@/stores/business.js'
 
 export const controls = (video) => {
   // 视频播放暂停
-  const doing = ref(true)
+  const doing = ref(false)
   const play = () => {
     if (!doing.value) {
       video.value.play()
@@ -31,7 +31,7 @@ export const controls = (video) => {
       // 因为获取到的音量是 0-1 之间，所以初始化先放大一百倍，给 进度条匹配上
       volume.value = video.value.volume * 100
       currentVolume.value = volume.value
-      video.value.play()
+      // video.value.play()
     }
   })
   const changeVolume = (res) => {
