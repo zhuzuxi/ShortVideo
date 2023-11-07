@@ -43,13 +43,13 @@ src 下目录结构
 
 * 使用的技术说明
 
-**Vue3+Vite+Pinia+Vue-router：**使用 vue3 的生态实现 Web 单页面开发，与后端通过 接口 进行交互。
+Vue3+Vite+Pinia+Vue-router：使用 vue3 的生态实现 Web 单页面开发，与后端通过 接口 进行交互。
 
-**Antd-V：**选择 antd-v 作为UI组件库，是因为完成本项目组件比较基础，elm、vant 这些 的也比较多就想换一个体验一下，为下一步学习 react 打基础。
+Antd-V：选择 antd-v 作为UI组件库，是因为完成本项目组件比较基础，elm、vant 这些 的也比较多就想换一个体验一下，为下一步学习 react 打基础。
 
-**Eslint+Prettier：**使用熟悉的这两个库进行代码格式校验以及格式化，为后续维护扩展奠定基础。
+Eslint+Prettier：使用熟悉的这两个库进行代码格式校验以及格式化，为后续维护扩展奠定基础。
 
-**Less+Axios+QS：**使用 Less 预处理器提高 css 编写效率。 Axios 和 QS 为接口交互提供服务。
+Less+Axios+QS：使用 Less 预处理器提高 css 编写效率。 Axios 和 QS 为接口交互提供服务。
 
 ## 后端
 
@@ -100,6 +100,8 @@ src 下目录结构
 ##  Demo 演示视频
 
 [演示视频](./teamDoc/teamVideo.avi)
+* 如果视频播放不了，可以前往b站看我发布的视频
+* [B站主页](https://space.bilibili.com/69931468?spm_id_from=333.1007.0.0)
 
 ## 项目文档
 
