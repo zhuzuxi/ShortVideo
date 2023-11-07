@@ -1,5 +1,7 @@
 import { ref, reactive, computed, toRaw } from 'vue'
+import { message } from 'ant-design-vue'
 import { Form } from 'ant-design-vue'
+import { useUpload } from '@/hooks/upload.js'
 
 export const useForm = () => {
   // 表单相关
@@ -43,11 +45,16 @@ export const useForm = () => {
   const helpMsg = ref({})
   const myValidate = (e) => {
     // console.log(e)
-    validate()
+    return validate()
       .then(() => {
         helpMsg.value = []
         console.log(helpMsg.value)
         console.log(toRaw(formState))
+        // 模拟上传成功
+        return true
+
+        // 清空页面
+        // resetForm()
       })
       .catch((err) => {
         helpMsg.value = []
@@ -58,10 +65,20 @@ export const useForm = () => {
         console.log(helpMsg.value)
       })
   }
+
+  const { deleteUrl } = useUpload()
   const submit = () => {
-    myValidate()
+    myValidate().then((res) => {
+      if (res === true) {
+        message.success('上传成功', 1)
+      } else {
+        message.error('请检查表单填写规范！', 1)
+      }
+    })
   }
   const resetForm = () => {
+    deleteUrl(true)
+    deleteUrl(false)
     formRef.value.resetFields()
   }
 

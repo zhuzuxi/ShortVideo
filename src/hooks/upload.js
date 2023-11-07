@@ -1,10 +1,16 @@
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
-const token =
-  'w3VdBuR5aZoHP-v3NIjNJiOh0DwEq5Fh9EtQj1rM:VjsbBphHxyFgdQfdvwLzkyvTBDM=:eyJzY29wZSI6ImdoLWZyb250IiwiZGVhZGxpbmUiOjE2OTkyNjM4MjV9'
-const eToken =
-  '?e=300%token=w3VdBuR5aZoHP-v3NIjNJiOh0DwEq5Fh9EtQj1rM:VjsbBphHxyFgdQfdvwLzkyvTBDM=:eyJzY29wZSI6ImdoLWZyb250IiwiZGVhZGxpbmUiOjE2OTkyNjM4MjV9'
-const domain = 'http://s3mp1y0fe.hn-bkt.clouddn.com/'
+import { getToken } from '@/tools/request.js'
+
+const token = ref('')
+const eToken = ref('')
+const domain = 'http://s3c51zvtx.hn-bkt.clouddn.com/'
+
+getToken().then((res) => {
+  token.value = res.data
+  eToken.value = `?e=300&token=${token.value}`
+  console.log(res.data)
+})
 
 import * as qiniu from 'qiniu-js'
 export const useUpload = () => {
@@ -39,16 +45,16 @@ export const useUpload = () => {
       },
       complete(res) {
         if (flag) {
-          videoUrl.value = `${domain}${res.key}${eToken}`
+          videoUrl.value = `${domain}${res.key}${eToken.value}`
           // 视频的地址在七牛云中似乎是直接下载的，需要额外获取下载权限 现在视频又可以了，似乎需要通过审核才能访问
           // 其他图片上传的也会这样，不知道为什么：401 (Unauthorized)
         } else {
-          imgUrl.value = `${domain}${res.key}${eToken}`
+          imgUrl.value = `${domain}${res.key}${eToken.value}`
         }
-        console.log('上传成功：', res)
+        // console.log('上传成功：', res)
       }
     }
-    const observable = qiniu.upload(file, file.name, token, putExtra, config)
+    const observable = qiniu.upload(file, file.name, token.value, putExtra, config)
     // // 上传开始
     const subscription = observable.subscribe(observer)
   }
@@ -73,6 +79,7 @@ export const useUpload = () => {
     customRequestHandler(videoInput.value.files[0], true)
   }
   const deleteUrl = (flag) => {
+    console.log('shanchu')
     if (flag) {
       videoUrl.value = ''
     } else {

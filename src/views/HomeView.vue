@@ -5,6 +5,7 @@
         <a-button
           :type="item.type"
           class="gh_button item"
+          v-if="options"
           v-for="(item, index) in options"
           @click="changeItem(index)"
         >
@@ -21,98 +22,24 @@
 import Content from '@/components/layout/Content.vue'
 import ghVideo from '@/components/GhVideo.vue'
 import { ref } from 'vue'
+import { getCategory } from '@/tools/request.js'
+import { useBusinessStore } from '@/stores/business.js'
 
-let currentId = ref(1)
-const options = ref([
-  {
-    id: 1,
-    name: '推荐',
-    type: 'primary'
-  },
-  {
-    id: 2,
-    name: '热门',
-    type: 'default'
-  },
-  {
-    id: 3,
-    name: '体育',
-    type: 'default'
-  },
-  {
-    id: 4,
-    name: '旅行',
-    type: 'default'
-  },
-  {
-    id: 5,
-    name: '游戏',
-    type: 'default'
-  },
-  {
-    id: 3,
-    name: '体育',
-    type: 'default'
-  },
-  {
-    id: 4,
-    name: '旅行',
-    type: 'default'
-  },
-  {
-    id: 5,
-    name: '游戏',
-    type: 'default'
-  },
-  {
-    id: 3,
-    name: '体育',
-    type: 'default'
-  },
-  {
-    id: 4,
-    name: '旅行',
-    type: 'default'
-  },
-  {
-    id: 5,
-    name: '游戏',
-    type: 'default'
-  },
-  {
-    id: 6,
-    name: '户外',
-    type: 'default'
-  },
-  {
-    id: 2,
-    name: '热门',
-    type: 'default'
-  },
-  {
-    id: 3,
-    name: '体育',
-    type: 'default'
-  },
-  {
-    id: 4,
-    name: '旅行',
-    type: 'default'
-  },
-  {
-    id: 5,
-    name: '游戏',
-    type: 'default'
-  },
-  {
-    id: 6,
-    name: '户外',
-    type: 'default'
-  }
-])
+let currentId = ref(0)
+const options = ref([])
+getCategory().then((res) => {
+  // 拿到数据后格式化一下
+  let data = res.data
+  data = data.map((item) => {
+    item.type = 'default'
+    return item
+  })
+  data[0].type = 'primary'
+  options.value = data
+})
 // 点击切换
 const changeItem = (index1) => {
-  currentId = index1 + 1 //保存当前选择的分类，用于后续获取视频
+  currentId.value = index1 //保存当前选择的分类，用于后续获取视频
   options.value = options.value.map((item, index2) => {
     if (index1 === index2) {
       item.type = 'primary'
@@ -121,7 +48,9 @@ const changeItem = (index1) => {
     }
     return item //记得要 return
   })
-  console.log(currentId)
+  // 调用接口获取视频
+  const store = useBusinessStore()
+  store.changeFlag(options.value[index1 + 1].name)
 }
 
 // 分类

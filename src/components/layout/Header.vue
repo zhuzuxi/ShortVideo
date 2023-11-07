@@ -17,7 +17,7 @@
       </div>
       <!-- 登录或者个人中心 可以放个组件 -->
       <!-- <div class="person gh_button">登录</div> -->
-      <a-button class="person" @click="toPerson">登录</a-button>
+      <a-button class="person" @click="toPerson">{{ text }}</a-button>
     </div>
   </div>
 </template>
@@ -25,15 +25,24 @@
 import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { PlusCircleOutlined } from '@ant-design/icons-vue'
+import { message } from 'ant-design-vue'
+
 const router = useRouter()
 const route = useRoute()
 const value = ref('')
+const text = ref('登录')
 
+const login = () => {}
 const toUpload = () => {
   router.push('/upload')
 }
 const toPerson = () => {
-  router.push('/person')
+  if (text.value === '登录') {
+    text.value = '助麻花'
+    message.success('登陆成功', 1)
+  } else {
+    router.push('/person')
+  }
 }
 
 const onSearch = (searchValue) => {

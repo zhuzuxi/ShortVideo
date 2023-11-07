@@ -3,13 +3,14 @@
  * @param video {HYML DOM} 表示视频组件,用 ref 获取到的 响应式值
  *
  */
-import { getRecommend } from '@/tools/request.js'
-import { ref, onMounted, onUnmounted } from 'vue'
+import { getRecommend, getVideoFlag } from '@/tools/request.js'
+import { ref, watch, computed, onMounted, onUnmounted } from 'vue'
 import { message } from 'ant-design-vue'
+import { useBusinessStore } from '@/stores/business.js'
 
 export const controls = (video) => {
   // 视频播放暂停
-  const doing = ref(false)
+  const doing = ref(true)
   const play = () => {
     if (!doing.value) {
       video.value.play()
@@ -30,6 +31,7 @@ export const controls = (video) => {
       // 因为获取到的音量是 0-1 之间，所以初始化先放大一百倍，给 进度条匹配上
       volume.value = video.value.volume * 100
       currentVolume.value = volume.value
+      video.value.play()
     }
   })
   const changeVolume = (res) => {
@@ -119,18 +121,7 @@ export const controls = (video) => {
     }
   }
   // 视频切换
-  const videoList = ref([
-    {
-      video: {
-        videoUrl: 'https://m.huanqiu.com/article/4FFAcORXyWG'
-      }
-    },
-    {
-      video: {
-        videoUrl: 'https://m.huanqiu.com/article/4FF7qXziTHO'
-      }
-    }
-  ])
+  const videoList = ref([])
   const videoShow = ref(true)
   const index = ref(1)
   const cur = ref(0)
@@ -150,10 +141,10 @@ export const controls = (video) => {
       // 重新调用 changeVideo 一次
       // console.log(video.value)
       // console.log('请求下一页') 服务器挂了，先还原
-      // index.value += 1
-      // getRecommendList(index)
-      // cur.value += 1
-      cur.value = 0
+      index.value += 1
+      getRecommendList(index.value)
+      cur.value += 1
+      // cur.value = 0
       video.value.src = videoList.value[cur.value].video.videoUrl
       video.value.load()
       video.value.play()
@@ -171,10 +162,10 @@ export const controls = (video) => {
       video.value.play()
     } else {
       // 请求下一页
-      // index.value += 1
-      // getRecommendList(index,false)
-      // cur.value = 29
-      cur.value = videoList.value.length - 1
+      index.value += 1
+      getRecommendList(index.value, false)
+      cur.value = 29
+      // cur.value = videoList.value.length - 1
       video.value.src = videoList.value[cur.value].video.videoUrl
       video.value.load()
       video.value.play()
@@ -227,11 +218,11 @@ export const controls = (video) => {
   const switchVideo = (direction) => {
     // 根据滚动方向切换视频
     if (direction === 'up') {
-      console.log('滚轮向上')
-      // changeVideoUp()
+      // console.log('滚轮向上')
+      changeVideoUp()
     } else if (direction === 'down') {
-      console.log('滚轮向下')
-      // changeVideoDown()
+      // console.log('滚轮向下')
+      changeVideoDown()
     }
   }
   const mySwitchVideo = throttle(switchVideo, 600, false)
@@ -275,7 +266,7 @@ export const controls = (video) => {
 
   const getRecommendList = (id, flag = true) => {
     getRecommend(id).then((res) => {
-      // console.log(res)
+      console.log(res)
       if (flag) {
         videoList.value.push(...res.data)
       } else {
@@ -284,10 +275,31 @@ export const controls = (video) => {
       }
     })
   }
+  const store = useBusinessStore()
+  const myData = computed(() => store.categoryFlag)
+  // 接口不规范，曲线救国
+  watch(myData, (n, o) => {
+    // 如果变化了就调用分类接口刷新视频列表
+    // videoList.value = []
+    // getVideoFlag(1, '').then((res) => {
+    //   video.value = res.data
+    // })
+    video.value.src = ''
+    video.value.load()
+    // video.value.play()
+    getRecommend(1).then((res) => {
+      console.log(res)
+      videoList.value = res.data
+    })
+    video.value.src = videoList.value[cur.value].video.videoUrl
+    video.value.load()
+    doing.value = true
+    video.value.play()
+  })
 
   // 对接接口
   onMounted(() => {
-    // getRecommendList(index.value)
+    getRecommendList(index.value)
   })
 
   return {

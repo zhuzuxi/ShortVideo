@@ -1,5 +1,5 @@
 import axios from 'axios'
-axios.defaults.baseURL = 'http://8.134.119.175:8080' //baseURL
+axios.defaults.baseURL = 'http://47.113.144.50:8080' //baseURL
 //post请求头
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
 //设置超时

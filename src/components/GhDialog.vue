@@ -26,8 +26,37 @@
         </div>
       </div>
       <div class="content">
-        <div class="item" v-for="(item, index) in itemList">
-          <div class="img">头像</div>
+        <div class="item" v-for="(item, index) in itemList" v-if="store.isPannalActive">
+          <div class="img">
+            <img :src="item.img" alt="" />
+          </div>
+          <div class="detail">
+            <div class="username">{{ item.username }}</div>
+            <div class="btn_list">{{ item.motto }}</div>
+          </div>
+          <div class="follow">
+            <a-button type="primary" v-show="!item.isFollow" @click="changeFollow(item)"
+              >关注</a-button
+            >
+            <a-button
+              ref="followed"
+              type="primary"
+              v-show="item.isFollow"
+              :class="{ followed, cancel: item.isCancel }"
+              @click="changeFollow(item)"
+              @mouseenter="cancelEnter(item)"
+              @mouseleave="cancelLeave(item)"
+              >{{ item.text }}</a-button
+            >
+            <!-- 鼠标滑上去展现以下组件 用 v-show  -->
+            <!-- <a-button type="primary" danger>取消关注</a-button> -->
+          </div>
+        </div>
+        <!-- 粉丝 -->
+        <div class="item" v-for="(item, index) in fansList" v-else>
+          <div class="img">
+            <img :src="item.img" alt="" />
+          </div>
           <div class="detail">
             <div class="username">{{ item.username }}</div>
             <div class="btn_list">{{ item.motto }}</div>
@@ -68,15 +97,7 @@ const isCancel = ref(false) //cancel flag
 
 const itemList = ref([
   {
-    img: '头像',
-    username: '用户名',
-    motto: '格言',
-    text: '关注',
-    isFollow: false,
-    isCancel: false
-  },
-  {
-    img: '头像',
+    img: 'http://47.120.44.145:9999/lcf1.jpg',
     username: '张三',
     motto: '纸上得来终觉浅',
     text: '已关注', // text 于 isFollow 是关联在一起的
@@ -84,11 +105,53 @@ const itemList = ref([
     isCancel: false
   },
   {
-    img: '头像',
-    username: '李四',
+    img: 'http://47.120.44.145:9999/lt1.jpg',
+    username: '良田',
     motto: '绝知此事要躬行',
     text: '已关注',
     isFollow: true,
+    isCancel: false
+  },
+  {
+    img: 'http://47.120.44.145:9999/hd3.jpg',
+    username: '李四',
+    motto: '天才少年-樱木花道',
+    text: '已关注',
+    isFollow: true,
+    isCancel: false
+  }
+])
+const fansList = ref([
+  {
+    img: 'http://47.120.44.145:9999/lcf2.jpg',
+    username: '李白',
+    motto: '天生我材必有用',
+    text: '关注', // text 于 isFollow 是关联在一起的
+    isFollow: false,
+    isCancel: false
+  },
+  {
+    img: 'http://47.120.44.145:9999/lt2.jpg',
+    username: '橘子',
+    motto: '是金子总会发光',
+    text: '关注',
+    isFollow: false,
+    isCancel: false
+  },
+  {
+    img: 'http://47.120.44.145:9999/lt3.jpg',
+    username: '天空',
+    motto: '可恶',
+    text: '关注',
+    isFollow: false,
+    isCancel: false
+  },
+  {
+    img: 'http://47.120.44.145:9999/lcf4.jpg',
+    username: '海洋',
+    motto: '什么都没有写~',
+    text: '关注', // text 于 isFollow 是关联在一起的
+    isFollow: false,
     isCancel: false
   }
 ])
@@ -204,6 +267,11 @@ const closeDialog = () => {
         line-height: 4vw;
         margin-right: 1vw;
         background-color: #fff;
+        > img {
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+        }
       }
       .detail {
         display: flex;

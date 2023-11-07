@@ -19,6 +19,32 @@ export const useBusinessStore = defineStore('business', () => {
       isPannalActive.value = false
     }
   }
+  // 首页视频分类
+  const categoryFlag = ref('')
+  const changeFlag = (data) => {
+    categoryFlag.value = data
+  }
 
-  return { dialogFlag, changeDialog, isPannalActive, changePannal }
+  // 上传页面
+  const videoUrl = ref('')
+  const imgUrl = ref('')
+  const VUrlChange = (data) => {
+    videoUrl.value = data
+  }
+  const IUrlChange = (data) => {
+    imgUrl.value = data
+  }
+
+  return {
+    dialogFlag,
+    categoryFlag,
+    videoUrl,
+    imgUrl,
+    VUrlChange,
+    IUrlChange,
+    changeDialog,
+    isPannalActive,
+    changePannal,
+    changeFlag
+  }
 })
