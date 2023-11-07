@@ -100,3 +100,11 @@ src 下目录结构
 ##  Demo 演示视频
 
 [演示视频](./teamDoc/teamVideo.avi)
+
+## 项目文档
+
+[项目文档](./teamDoc/项目文档.pdf)
+
+[项目文档目录](./teamDoc)
+
+> 项目文档以及视频放在 teamDoc 文件夹中，请评委前往查看
