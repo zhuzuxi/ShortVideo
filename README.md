@@ -100,7 +100,7 @@ Less+Axios+QS：使用 Less 预处理器提高 css 编写效率。 Axios 和 QS 
 ##  Demo 演示视频
 
 [演示视频](./teamDoc/teamVideo.avi)
-* 如果视频播放不了，可以前往b站看我发布的视频
+* 如果视频播放不了，可以前往b站看我发布的视频,后续我会将竞赛视频置顶！
 * [B站主页](https://space.bilibili.com/69931468?spm_id_from=333.1007.0.0)
 
 ## 项目文档
