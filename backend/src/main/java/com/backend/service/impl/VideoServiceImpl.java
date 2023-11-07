@@ -112,7 +112,7 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
             throw new RuntimeException(e);
         }
         String publicUrl = String.format("%s/%s", domainOfBucket, encodedFileName);
-        long expireInSeconds = 3600;//1小时，可以自定义链接过期时间
+        long expireInSeconds = 3600*24;//1小时，可以自定义链接过期时间
         String finalUrl = auth.privateDownloadUrl(publicUrl, expireInSeconds);
         return finalUrl;
     }
@@ -180,6 +180,9 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
         for (int i = 0; i< videoList.size(); i++){
             Video video = videoList.get(i);
             Long authorId = video.getAuthorId();
+            String baseurl = video.getVideoUrl();
+            String finalurl = getUrl(baseurl);
+            video.setVideoUrl(finalurl);
             videoUserDtoList.add(new VideoUserDto(video,userHashMap.get(authorId)));
         }
         return videoUserDtoList;
