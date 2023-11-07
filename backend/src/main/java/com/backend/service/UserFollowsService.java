@@ -10,4 +10,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface UserFollowsService extends IService<UserFollows> {
 
+    /**
+     * 关注/取消关注用户
+     * @param currUserId    当前登录用户id
+     * @param userId        要关注的用户id
+     * @return
+     */
+    Integer followOrCancel(Long currUserId, Long userId);
 }

@@ -30,6 +30,18 @@ public class Result<T> {
         return result;
     }
 
+    public static <T> Result<T> ERR(T object) {
+        Result<T> result = new Result<T>();
+        result.data = object;
+        result.code = 0;
+        return result;
+    }
     public Result() {
+    }
+
+    public static <T> Result<T> SUCCEED() {
+        Result<T> result = new Result<T>();
+        result.code = 1;
+        return result;
     }
 }

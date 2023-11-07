@@ -141,15 +141,8 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
         List<Video> videoList = videoPage.getRecords();
 
 
-        List<VideoUserDto> videoUserDtoList = getVideoUserDtos(videoList);
+//        System.out.println(String.format("video.size=%d",videoList.size()));
 
-
-        Collections.shuffle(videoUserDtoList);
-        return Result.SUCCEED(String.format("获取第%d页成功",pagenum),videoUserDtoList);
-    }
-
-    @NotNull
-    private List<VideoUserDto> getVideoUserDtos(List<Video> videoList) {
         /**
          * 获得作者对象列表
          */
@@ -161,22 +154,19 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
         QueryWrapper<User> userQueryWrapper=new QueryWrapper<>();
         userQueryWrapper.in("id",authorIdList);
         List<User> userList = userMapper.selectList(userQueryWrapper);
-        HashMap<Long, User> UserMap = new HashMap<>();
-        for (User user : userList) {
-            UserMap.put(user.getId(),user);
-        }
 
 
         /**
          * 拼接成 VideoUserDto
          */
         List<VideoUserDto> videoUserDtoList = new ArrayList<>();
-        for (int i = 0; i< videoList.size(); i++){
-            Video video = videoList.get(i);
-            video.setVideoUrl(getUrl(video.getVideoUrl()));
-            videoUserDtoList.add(new VideoUserDto(video,UserMap.get(video.getAuthorId())));
+        for (int i=0;i<videoList.size();i++){
+            videoUserDtoList.add(new VideoUserDto(videoList.get(i),userMapper.selectById(videoList.get(i).getAuthorId())));
         }
-        return videoUserDtoList;
+
+
+        Collections.shuffle(videoUserDtoList);
+        return Result.SUCCEED(String.format("获取第%d页成功",pagenum),videoUserDtoList);
     }
 
 
@@ -242,6 +232,24 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
     @Override
     public List<VideoVO> getVideoVOByIds(List<Long> ids) {
         return videoMapper.selectVideosByIds(ids);
+    }
+
+    /**
+     * 添加视频
+     * @param video
+     */
+    @Override
+    public Boolean addVideo(Video video) {
+        //补充视频信息
+        video.setPublishTime(new Date());
+        video.setVideo_status(1);
+        video.setLikes(0L);
+        video.setLikes(0L);
+        video.setCollection(0L);
+        if(videoMapper.insert(video)==1){
+            return true;
+        }
+        return false;
     }
 
     @Override

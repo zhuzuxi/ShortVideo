@@ -35,7 +35,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     public User getUserByUsername(String username) {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.eq("username",username);
-        return userMapper.selectOne(wrapper);       //获取用户实体
+        User user =  userMapper.selectOne(wrapper);       //获取用户实体
+        user.setPassword("");//将密码置为空
+        return user;
     }
 
     /**
