@@ -143,6 +143,15 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
 
 //        System.out.println(String.format("video.size=%d",videoList.size()));
 
+        List<VideoUserDto> videoUserDtoList = getVideoUserDtos(videoList);
+
+
+        Collections.shuffle(videoUserDtoList);
+        return Result.SUCCEED(String.format("获取第%d页成功",pagenum),videoUserDtoList);
+    }
+
+    @NotNull
+    private List<VideoUserDto> getVideoUserDtos(List<Video> videoList) {
         /**
          * 获得作者对象列表
          */
@@ -155,18 +164,25 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
         userQueryWrapper.in("id",authorIdList);
         List<User> userList = userMapper.selectList(userQueryWrapper);
 
+        HashMap<Long, User> userHashMap = new HashMap<>();
+        for (User user : userList) {
+            if (userHashMap.containsKey(user.getId())){
+                userHashMap.put(user.getId(),user);
+            }
+        }
+
+
 
         /**
          * 拼接成 VideoUserDto
          */
         List<VideoUserDto> videoUserDtoList = new ArrayList<>();
-        for (int i=0;i<videoList.size();i++){
-            videoUserDtoList.add(new VideoUserDto(videoList.get(i),userMapper.selectById(videoList.get(i).getAuthorId())));
+        for (int i = 0; i< videoList.size(); i++){
+            Video video = videoList.get(i);
+            Long authorId = video.getAuthorId();
+            videoUserDtoList.add(new VideoUserDto(video,userHashMap.get(authorId)));
         }
-
-
-        Collections.shuffle(videoUserDtoList);
-        return Result.SUCCEED(String.format("获取第%d页成功",pagenum),videoUserDtoList);
+        return videoUserDtoList;
     }
 
 
@@ -232,6 +248,11 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
     @Override
     public List<VideoVO> getVideoVOByIds(List<Long> ids) {
         return videoMapper.selectVideosByIds(ids);
+    }
+
+    @Override
+    public Result<List<VideoUserDto>> searchVideos(String key, Integer pagenum) {
+        return null;
     }
 
     /**
