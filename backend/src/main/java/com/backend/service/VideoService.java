@@ -48,4 +48,7 @@ public interface VideoService extends IService<Video> {
      * @param video
      */
     Boolean addVideo(Video video);
+
+    Result<VideoUserDto> getVideosByFlag(String flag, Integer pagenum);
+
 }

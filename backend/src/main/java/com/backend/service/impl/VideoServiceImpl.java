@@ -21,6 +21,7 @@ import com.qiniu.http.Response;
 import com.qiniu.storage.UploadManager;
 import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.util.Auth;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
@@ -111,7 +112,7 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
             throw new RuntimeException(e);
         }
         String publicUrl = String.format("%s/%s", domainOfBucket, encodedFileName);
-        long expireInSeconds = 3600;//1小时，可以自定义链接过期时间
+        long expireInSeconds = 3600*24;//1小时，可以自定义链接过期时间
         String finalUrl = auth.privateDownloadUrl(publicUrl, expireInSeconds);
         return finalUrl;
     }
@@ -142,6 +143,15 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
 
 //        System.out.println(String.format("video.size=%d",videoList.size()));
 
+        List<VideoUserDto> videoUserDtoList = getVideoUserDtos(videoList);
+
+
+        Collections.shuffle(videoUserDtoList);
+        return Result.SUCCEED(String.format("获取第%d页成功",pagenum),videoUserDtoList);
+    }
+
+    @NotNull
+    private List<VideoUserDto> getVideoUserDtos(List<Video> videoList) {
         /**
          * 获得作者对象列表
          */
@@ -154,71 +164,30 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
         userQueryWrapper.in("id",authorIdList);
         List<User> userList = userMapper.selectList(userQueryWrapper);
 
-
-        /**
-         * 拼接成 VideoUserDto
-         */
-        List<VideoUserDto> videoUserDtoList = new ArrayList<>();
-        for (int i=0;i<videoList.size();i++){
-            videoUserDtoList.add(new VideoUserDto(videoList.get(i),userMapper.selectById(videoList.get(i).getAuthorId())));
+        HashMap<Long, User> userHashMap = new HashMap<>();
+        for (User user : userList) {
+            if (userHashMap.containsKey(user.getId())){
+                userHashMap.put(user.getId(),user);
+            }
         }
 
-
-        Collections.shuffle(videoUserDtoList);
-        return Result.SUCCEED(String.format("获取第%d页成功",pagenum),videoUserDtoList);
-    }
-
-    /**
-     * 按关键字搜索
-     * @param pagenum
-     * @return
-     */
-    @Override
-    public Result<List<VideoUserDto>> searchVideos(String key, Integer pagenum) {
-        /**
-         * 简易的推荐
-         */
-        QueryWrapper<Video> videoQueryWrapper = new QueryWrapper<>();
-        videoQueryWrapper.orderByDesc("shares","'collection'","likes");
-
-        Page<Video> page=new Page<>(pagenum,30);
-        //根据视频描述或者视频标签做模糊查询
-        videoQueryWrapper.lambda().like(Video::getDescription,key)
-                .or().like(Video::getFlag,key);
-        Page<Video> videoPage = videoMapper.selectPage(page, videoQueryWrapper);
-        if (Objects.isNull(videoPage.getRecords())){
-            return Result.ERR(500,"网络异常请稍后再试",null);
-        }
-        List<Video> videoList = videoPage.getRecords();
-
-
-//        System.out.println(String.format("video.size=%d",videoList.size()));
-
-        /**
-         * 获得作者对象列表
-         */
-        List<Long> authorIdList=new ArrayList<>();
-        for (Video record : videoList) {
-            authorIdList.add(record.getAuthorId());
-        }
-
-        QueryWrapper<User> userQueryWrapper=new QueryWrapper<>();
-        userQueryWrapper.in("id",authorIdList);
-        List<User> userList = userMapper.selectList(userQueryWrapper);
 
 
         /**
          * 拼接成 VideoUserDto
          */
         List<VideoUserDto> videoUserDtoList = new ArrayList<>();
-        for (int i=0;i<videoList.size();i++){
-            videoUserDtoList.add(new VideoUserDto(videoList.get(i),userMapper.selectById(videoList.get(i).getAuthorId())));
+        for (int i = 0; i< videoList.size(); i++){
+            Video video = videoList.get(i);
+            Long authorId = video.getAuthorId();
+            String baseurl = video.getVideoUrl();
+            String finalurl = getUrl(baseurl);
+            video.setVideoUrl(finalurl);
+            videoUserDtoList.add(new VideoUserDto(video,userHashMap.get(authorId)));
         }
-
-
-        Collections.shuffle(videoUserDtoList);
-        return Result.SUCCEED(String.format("获取第%d页成功",pagenum),videoUserDtoList);
+        return videoUserDtoList;
     }
+
 
     /**
      *
@@ -284,6 +253,11 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
         return videoMapper.selectVideosByIds(ids);
     }
 
+    @Override
+    public Result<List<VideoUserDto>> searchVideos(String key, Integer pagenum) {
+        return null;
+    }
+
     /**
      * 添加视频
      * @param video
@@ -300,6 +274,17 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
             return true;
         }
         return false;
+    }
+
+    @Override
+    public Result<VideoUserDto> getVideosByFlag(String flag, Integer pagenum) {
+        QueryWrapper<Video> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("flag",flag);
+        Page<Video> page = new Page<>(pagenum,30);
+        Page<Video> videoPage = videoMapper.selectPage(page,queryWrapper);
+        List<Video> videos = videoPage.getRecords();
+        List<VideoUserDto> videoUserDtos = getVideoUserDtos(videos);
+        return Result.SUCCEED("获取成功",videoUserDtos);
     }
 }
 

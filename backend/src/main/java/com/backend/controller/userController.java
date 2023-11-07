@@ -24,6 +24,7 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/user")
+@CrossOrigin
 public class userController {
 
     @Resource
@@ -120,7 +121,6 @@ public class userController {
     @GetMapping("/getFollows/{user_id}")
     public Result<List<UserVO>> getFollows(@PathVariable("user_id") Long userId){
         List<UserVO> follows = userService.getFollows(userId);
-
         return Result.SUCCEED(follows);
     }
 
@@ -136,4 +136,6 @@ public class userController {
 
         return Result.SUCCEED(follows);
     }
+
+
 }

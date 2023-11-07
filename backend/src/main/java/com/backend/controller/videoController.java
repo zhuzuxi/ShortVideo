@@ -18,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/video")
+@CrossOrigin
 public class videoController {
 
     @Resource
@@ -59,6 +60,12 @@ public class videoController {
     public Result<String> getUpLoadToken(@RequestParam String bucket){
         String upToken = auth.uploadToken(bucket);
         return Result.SUCCEED("上传凭证",upToken);
+    }
+
+    @GetMapping("/videos/flags")
+    public Result<VideoUserDto> getVideosByFlag(@RequestParam String flag,@RequestParam(defaultValue = "1") Integer pagenum){
+
+        return videoService.getVideosByFlag(flag,pagenum);
     }
 
     /**
